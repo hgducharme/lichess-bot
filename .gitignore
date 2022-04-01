@@ -31,6 +31,12 @@
 *.out
 *.app
 
+# Makefile products
+.depend
+
+# Python
+*.pyc
+
 # Custom
 .DS_Store
 lichessEnv/
