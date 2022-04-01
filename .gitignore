@@ -31,8 +31,7 @@
 *.out
 *.app
 
-# macOS
+# Custom
 .DS_Store
-
-# Python
 lichessEnv/
+config.json
