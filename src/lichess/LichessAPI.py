@@ -16,17 +16,14 @@ URL_ENDPOINTS = {
 
 class LichessAPI():
     def __init__(self, oauth_token):
-        self.__oauth_token = oauth_token
-
-
+        self.session = requests.Session()
+        self.session.headers.update({"Authorization": f"Bearer {oauth_token}"})
 
     def get_profile(self):
         url = self.__construct_url(URL_ENDPOINTS["get_my_profile"])
-        header = self.__get_authorization_header()
+        request = self.session.get(url)
 
-        request = requests.get(url, headers = header)
-
-        return request.json()
+        return request
 
     def __construct_url(self, endpoint_url, **kwargs):
 
@@ -41,18 +38,9 @@ class LichessAPI():
 
         return url
 
-    def __get_authorization_header(self):
-        authorization_header = {
-            "Authorization": f"Bearer {self.__oauth_token}"
-        }
-
-        return authorization_header
-
     def upgrade_to_bot(self):
         url = self.__construct_url(URL_ENDPOINTS["upgrade_to_bot_account"])
-        header = self.__get_authorization_header()
-
-        request = requests.post(url, headers = header)
+        request = self.session.post(url)
 
         return request
 
@@ -68,70 +56,50 @@ class LichessAPI():
 
         return is_bot
 
-    def set_api_token(self, token):
-        self.__oauth_token = token
-
-    def get_api_token(self):
-        return self.__oauth_token
-
     def move(self, gameId, move, offeringDraw = False):
         url = self.__construct_url(URL_ENDPOINTS["make_a_bot_move"], gameId = gameId, move = move, offeringDraw = offeringDraw)
-        header = self.__get_authorization_header()
-
-        request = requests.post(url, headers = header)
+        request = self.session.post(url)
 
         return request
 
     def stream_game_state(self, gameId):
         url = self.__construct_url(URL_ENDPOINTS["stream_bot_game_state"], gameId = gameId)
-        header = self.__get_authorization_header()
-
-        request = requests.post(url, headers = header)
+        request = self.session.post(url)
 
         return request
 
     def list_challenges(self):
         url = self.__construct_url(URL_ENDPOINTS["list_challenges"])
-        header = self.__get_authorization_header()
-
-        request = requests.get(url, headers = header)
+        request = self.session.get(url)
 
         return request
 
     def create_challenge(self, username, request_body):
         url = self.__construct_url(URL_ENDPOINTS["create_challenge"], username = username)
-        header = self.__get_authorization_header()
-
-        request = requests.post(url, data = request_body, headers = header)
+        request = self.session.post(url, data = request_body)
 
         return request
 
     def accept_challenge(self, challengeId):
         url = self.__construct_url(URL_ENDPOINTS["accept_challenge"], challengeId = challengeId)
-        header = self.__get_authorization_header()
-
-        request = requests.post(url, headers = header)
+        request = self.session.post(url)
 
         return request
 
     def decline_challenge(self, challengeId, request_body):
-        header = self.__get_authorization_header()
         url = self.__construct_url(URL_ENDPOINTS["decline_challenge"], challengeId = challengeId)
-
-        request = requests.post(url, data = request_body, headers = header)
+        request = self.session.post(url, data = request_body)
 
         return request
 
     def challenge_ai(self, request_body):
         url = self.__construct_url(URL_ENDPOINTS["challenge_ai"])
-        header = self.__get_authorization_header()
-
-        request = requests.post(url, data = request_body, headers = header)
+        request = self.session.post(url, data = request_body)
 
         return request
 
     def create_seek(self, request_body):
         url = self.__construct_url(URL_ENDPOINTS["create_seek"])
-        header = self.__get_authorization_header()
+        request = self.session.post(url, data = request_body)
 
-        request = requests.post(url, data = request_body, headers = header)
+        return request
