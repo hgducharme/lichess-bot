@@ -63,6 +63,14 @@ class LichessAPI():
         return request
 
     def stream_game_state(self, gameId):
+
+        '''
+        TODO: I think we need to stream like this?
+
+        with requests.get(url, stream=True) as r:
+            # Do things with the response here.
+
+        '''
         url = self.__construct_url(URL_ENDPOINTS["stream_bot_game_state"], gameId = gameId)
         request = self.session.post(url)
 
