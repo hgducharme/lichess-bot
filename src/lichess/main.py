@@ -1,21 +1,15 @@
 import json
 from LichessAPI import LichessAPI
-from UserInterface import UserInterface
+from LichessCLI import LichessCLI
 
-if __name__ == "__main__":
+def load_config(key):
     with open("/Users/hgducharme/Documents/repos/chessAI/config.json") as file:
         config = json.load(file)
 
-    lichess_token = config["lichessToken"]
-    api = LichessAPI(lichess_token)
+    return config[key]
 
-    request_body = {
-        "rated": "false",
-        "time": "10",
-        "increment": "0",
-        "color": "random",
-        "variant": "standard",
-    }
-    
-    ui = UserInterface()
-    ui.start()
+if __name__ == "__main__":
+    lichess_token = load_config("lichessToken")
+    api = LichessAPI(lichess_token)
+    cli = LichessCLI(api)
+    cli.run()
