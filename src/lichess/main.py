@@ -1,5 +1,6 @@
 import json
 from LichessAPI import LichessAPI
+from UserInterface import UserInterface
 
 if __name__ == "__main__":
     with open("/Users/hgducharme/Documents/repos/chessAI/config.json") as file:
@@ -15,5 +16,6 @@ if __name__ == "__main__":
         "color": "random",
         "variant": "standard",
     }
-    # response = api.create_seek(request_body)
-    response = api.get_profile()
+    
+    ui = UserInterface()
+    ui.start()
