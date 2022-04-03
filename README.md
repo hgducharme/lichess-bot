@@ -4,8 +4,8 @@ This is a hobbyist's attempt at machine learning by training a chess bot to play
 
 This repo houses two things:
 
-1. An interface to the lichess API
-2. A chess engine that utilizes machine learning
+1. (Python) An interface to the lichess API using Python
+2. (C++) A chess engine that utilizes machine learning
 
 # The Chess Engine
 
