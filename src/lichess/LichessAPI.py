@@ -7,7 +7,7 @@ URL_ENDPOINTS = {
     "upgrade_to_bot_account": "bot/account/upgrade",
     "make_a_bot_move": "bot/game/<gameId>/move/<move>",
     "stream_bot_game_state": "bot/game/stream/<gameId>",
-    "list_challenges": "challenge",
+    "stream_challenges": "challenge",
     "challenge_ai": "challenge/ai",
     "create_challenge": "challenge/<username>",
     "accept_challenge": "challenge/<challengeId>/accept",
@@ -78,11 +78,11 @@ class LichessAPI():
 
         return response
 
-    def list_challenges(self):
-        url = self.__construct_url(URL_ENDPOINTS["list_challenges"])
-        response = self.session.get(url)
+    def stream_challenges(self):
+        url = self.__construct_url(URL_ENDPOINTS["stream_challenges"])
+        response = self.session.get(url, stream = True)
 
-        return response
+        return response.iter_lines()
 
     def create_challenge(self, username, request_body):
         url = self.__construct_url(URL_ENDPOINTS["create_challenge"], username = username)

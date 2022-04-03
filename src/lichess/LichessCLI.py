@@ -47,7 +47,9 @@ class LichessCLI:
         '''
 
         online_bots = self.api.stream_online_bots()
-        online_bots = self._parse_online_bots(online_bots)
+        online_bots = self._parse_stream(online_bots)
+        challenge_requests = self.api.stream_challenges()
+        challenge_requests = self._parse_stream(challenge_requests)
 
     def __challenge_ai(self):
         return 0
@@ -55,10 +57,10 @@ class LichessCLI:
     def __quit(self):
         self.is_running = False
 
-    def _parse_online_bots(self, bots):
-        online_bots = []
-        for line in bots:
+    def _parse_stream(self, stream):
+        items_in_stream = []
+        for line in stream:
             if line:
-                online_bots.append(json.loads(line))
+                items_in_stream.append(json.loads(line))
 
-        return tuple(online_bots)
+        return tuple(items_in_stream)
