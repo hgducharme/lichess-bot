@@ -22,9 +22,9 @@ class LichessAPI():
 
     def get_profile(self):
         url = self.__construct_url(URL_ENDPOINTS["get_my_profile"])
-        request = self.session.get(url)
+        response = self.session.get(url)
 
-        return request
+        return response
 
     def __construct_url(self, endpoint_url, **kwargs):
 
@@ -41,9 +41,9 @@ class LichessAPI():
 
     def upgrade_to_bot(self):
         url = self.__construct_url(URL_ENDPOINTS["upgrade_to_bot_account"])
-        request = self.session.post(url)
+        response = self.session.post(url)
 
-        return request
+        return response
 
     def is_bot_account(self):
         profile = self.get_profile()
@@ -60,9 +60,9 @@ class LichessAPI():
     def move(self, gameId, move, offeringDraw = False):
         url = self.__construct_url(URL_ENDPOINTS["make_a_bot_move"], gameId = gameId, move = move)
         query_parameters = { "offeringDraw": offeringDraw }
-        request = self.session.post(url, params = query_parameters)
+        response = self.session.post(url, params = query_parameters)
 
-        return request
+        return response
 
     def stream_game_state(self, gameId):
 
@@ -74,36 +74,43 @@ class LichessAPI():
 
         '''
         url = self.__construct_url(URL_ENDPOINTS["stream_bot_game_state"], gameId = gameId)
-        request = self.session.post(url)
+        response = self.session.post(url)
 
-        return request
+        return response
 
     def list_challenges(self):
         url = self.__construct_url(URL_ENDPOINTS["list_challenges"])
-        request = self.session.get(url)
+        response = self.session.get(url)
 
-        return request
+        return response
 
     def create_challenge(self, username, request_body):
         url = self.__construct_url(URL_ENDPOINTS["create_challenge"], username = username)
-        request = self.session.post(url, data = request_body)
+        response = self.session.post(url, data = request_body)
 
-        return request
+        return response
 
     def accept_challenge(self, challengeId):
         url = self.__construct_url(URL_ENDPOINTS["accept_challenge"], challengeId = challengeId)
-        request = self.session.post(url)
+        response = self.session.post(url)
 
-        return request
+        return response
 
     def decline_challenge(self, challengeId, request_body):
         url = self.__construct_url(URL_ENDPOINTS["decline_challenge"], challengeId = challengeId)
-        request = self.session.post(url, data = request_body)
+        response = self.session.post(url, data = request_body)
 
-        return request
+        return response
 
     def challenge_ai(self, request_body):
         url = self.__construct_url(URL_ENDPOINTS["challenge_ai"])
-        request = self.session.post(url, data = request_body)
+        response = self.session.post(url, data = request_body)
 
-        return request
+        return response
+
+    def stream_online_bots(self, number_of_bots_per_second = 50):
+        url = self.__construct_url(URL_ENDPOINTS["stream_online_bots"])
+        query_parameters = { "nb": number_of_bots_per_second }
+        response = self.session.get(url, params = query_parameters, stream = True)
+
+        return response.iter_lines()

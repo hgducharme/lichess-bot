@@ -1,3 +1,4 @@
+import json
 import argparse
 
 MENU_OPTIONS = {
@@ -36,10 +37,28 @@ class LichessCLI:
             print(f"{key}. -- {MENU_OPTIONS[key]}")
 
     def __matchmaking(self):
-        return 0
+        '''
+        1) get list of bots online
+        2) check for challenge requests
+        3) prioritize challenge requests, so pull one off the stack that we want. For now, let's pick the first one.
+        4) accept it
+        5) read the game stream
+        6) read the event stream
+        '''
+
+        online_bots = self.api.stream_online_bots()
+        online_bots = self._parse_online_bots(online_bots)
 
     def __challenge_ai(self):
         return 0
         
     def __quit(self):
         self.is_running = False
+
+    def _parse_online_bots(self, bots):
+        online_bots = []
+        for line in bots:
+            if line:
+                online_bots.append(json.loads(line))
+
+        return tuple(online_bots)
