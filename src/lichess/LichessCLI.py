@@ -47,6 +47,7 @@ class LichessCLI:
 
         online_bots = self._get_and_parse_online_bots()
         challenges = self._get_and_parse_challenges()
+        event_stream = self._get_and_parse_event_stream()
 
     def _get_and_parse_online_bots(self):
         online_bots = self.api.stream_online_bots()
@@ -59,6 +60,12 @@ class LichessCLI:
         challenges = self._parse_stream(challenges)
 
         return challenges
+
+    def _get_and_parse_event_stream(self):
+        event_stream = self.api.stream_events()
+        event_stream = self._parse_stream(event_stream)
+
+        return event_stream
 
     def _challenge_ai(self):
         return 0

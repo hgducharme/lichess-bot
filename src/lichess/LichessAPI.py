@@ -12,7 +12,8 @@ URL_ENDPOINTS = {
     "create_challenge": "challenge/<username>",
     "accept_challenge": "challenge/<challengeId>/accept",
     "decline_challenge": "challenge/<challengeId>/decline",
-    "stream_online_bots": "bot/online"
+    "stream_online_bots": "bot/online",
+    "stream_events": "stream/event"
 }
 
 class LichessAPI():
@@ -112,5 +113,11 @@ class LichessAPI():
         url = self._construct_url(URL_ENDPOINTS["stream_online_bots"])
         query_parameters = { "nb": number_of_bots_per_second }
         response = self.session.get(url, params = query_parameters, stream = True)
+
+        return response.iter_lines()
+
+    def stream_events(self):
+        url = self._construct_url(URL_ENDPOINTS["stream_events"])
+        response = self.session.get(url, stream = True)
 
         return response.iter_lines()
