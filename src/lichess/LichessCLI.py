@@ -36,15 +36,6 @@ class LichessCLI:
             print(f"{key}. -- {MENU_OPTIONS[key]}")
 
     def _matchmaking(self):
-        '''
-        1) get list of bots online
-        2) check for challenge requests
-        3) prioritize challenge requests, so pull one off the stack that we want. For now, let's pick the first one.
-        4) accept it
-        5) read the game stream
-        6) read the event stream
-        '''
-
         online_bots = self._get_and_parse_online_bots()
         challenges = self._get_and_parse_challenges()
         event_stream = self._get_and_parse_event_stream()
