@@ -15,28 +15,27 @@ class LichessCLI:
 
     def run(self):
         print("Welcome to the Lichess CLI tool. Please select one of the commands below: ")
-        self.__print_menu()
+        self._print_menu()
 
         while self.is_running:
             command = int(input("Enter your choice: "))
 
             if (command == 1):
-                self.__matchmaking()
+                self._matchmaking()
             elif (command == 2):
-                self.__challenge_ai()
+                self._challenge_ai()
             elif (command == 3):
-                self.__print_menu()
+                self._print_menu()
             elif (command == 4):
-                self.__quit()
+                self._quit()
             else:
                 print("Sorry, I don't understand that command. Please try again.")
 
-
-    def __print_menu(self):
+    def _print_menu(self):
         for key in MENU_OPTIONS.keys():
             print(f"{key}. -- {MENU_OPTIONS[key]}")
 
-    def __matchmaking(self):
+    def _matchmaking(self):
         '''
         1) get list of bots online
         2) check for challenge requests
@@ -61,10 +60,10 @@ class LichessCLI:
 
         return challenges
 
-    def __challenge_ai(self):
+    def _challenge_ai(self):
         return 0
         
-    def __quit(self):
+    def _quit(self):
         self.is_running = False
 
     def _parse_stream(self, stream):
