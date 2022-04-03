@@ -1,6 +1,8 @@
 import json
 import argparse
 
+from ChallengeHandler import ChallengeHandler
+
 MENU_OPTIONS = {
     1: "Matchmaking",
     2: "Challenge the AI",
@@ -9,9 +11,9 @@ MENU_OPTIONS = {
 }
 
 class LichessCLI:
-    def __init__(self, lichessAPI):
+    def __init__(self, lichess_api):
         self.is_running = True
-        self.api = lichessAPI
+        self.api = lichess_api
 
     def run(self):
         print("Welcome to the Lichess CLI tool. Please select one of the commands below: ")
@@ -27,6 +29,11 @@ class LichessCLI:
             elif (command == 3):
                 self._print_menu()
             elif (command == 4):
+                '''
+                TODO:
+                1) Detect Ctrl-C and route it to this option
+                2) Gracefully shut down all threads and release their memory
+                '''
                 self._quit()
             else:
                 print("Sorry, I don't understand that command. Please try again.")
@@ -36,8 +43,10 @@ class LichessCLI:
             print(f"{key}. -- {MENU_OPTIONS[key]}")
 
     def _matchmaking(self):
+        challenge_handler = ChallengeHandler(self.api, name = "challenge_handler_thread")
+        # challenge_handler.start()
+
         online_bots = self._get_and_parse_online_bots()
-        challenges = self._get_and_parse_challenges()
         event_stream = self._get_and_parse_event_stream()
 
     def _get_and_parse_online_bots(self):
@@ -45,12 +54,6 @@ class LichessCLI:
         online_bots = self._parse_stream(online_bots)
 
         return online_bots
-
-    def _get_and_parse_challenges(self):
-        challenges = self.api.stream_challenges()
-        challenges = self._parse_stream(challenges)
-
-        return challenges
 
     def _get_and_parse_event_stream(self):
         event_stream = self.api.stream_events()
