@@ -5,13 +5,14 @@ API_BASE_URL = "https://lichess.org/api/"
 URL_ENDPOINTS = {
     "get_my_profile": "account",
     "upgrade_to_bot_account": "bot/account/upgrade",
-    "make_a_bot_move": "bot/game/<gameId>/move/<move>?offeringDraw=<offeringDraw>",
+    "make_a_bot_move": "bot/game/<gameId>/move/<move>",
     "stream_bot_game_state": "bot/game/stream/<gameId>",
     "list_challenges": "challenge",
     "challenge_ai": "challenge/ai",
     "create_challenge": "challenge/<username>",
     "accept_challenge": "challenge/<challengeId>/accept",
-    "decline_challenge": "challenge/<challengeId>/decline"
+    "decline_challenge": "challenge/<challengeId>/decline",
+    "stream_online_bots": "bot/online"
 }
 
 class LichessAPI():
@@ -57,8 +58,9 @@ class LichessAPI():
         return is_bot
 
     def move(self, gameId, move, offeringDraw = False):
-        url = self.__construct_url(URL_ENDPOINTS["make_a_bot_move"], gameId = gameId, move = move, offeringDraw = offeringDraw)
-        request = self.session.post(url)
+        url = self.__construct_url(URL_ENDPOINTS["make_a_bot_move"], gameId = gameId, move = move)
+        query_parameters = { "offeringDraw": offeringDraw }
+        request = self.session.post(url, params = query_parameters)
 
         return request
 
@@ -102,12 +104,6 @@ class LichessAPI():
 
     def challenge_ai(self, request_body):
         url = self.__construct_url(URL_ENDPOINTS["challenge_ai"])
-        request = self.session.post(url, data = request_body)
-
-        return request
-
-    def create_seek(self, request_body):
-        url = self.__construct_url(URL_ENDPOINTS["create_seek"])
         request = self.session.post(url, data = request_body)
 
         return request
