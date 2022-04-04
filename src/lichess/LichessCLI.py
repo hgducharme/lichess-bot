@@ -43,11 +43,11 @@ class LichessCLI:
             print(f"{key}. -- {MENU_OPTIONS[key]}")
 
     def _matchmaking(self):
-        challenge_handler = ChallengeHandler(self.api, name = "challenge_handler_thread")
-        # challenge_handler.start()
+        challenge_handler = ChallengeHandler(self.api, name = "challenge_handler_thread", daemon = True)
+        challenge_handler.start()
 
         online_bots = self._get_and_parse_online_bots()
-        event_stream = self._get_and_parse_event_stream()
+        # event_stream = self._get_and_parse_event_stream()
 
     def _get_and_parse_online_bots(self):
         online_bots = self.api.stream_online_bots()
