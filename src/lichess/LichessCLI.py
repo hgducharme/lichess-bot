@@ -1,8 +1,9 @@
 import json
-import argparse
+import logging
 from conf import settings
 
 from ChallengeHandler import ChallengeHandler
+from EventHandler import EventHandler
 
 # TODO: Maybe make this an enum?
 MENU_OPTIONS = {
@@ -17,6 +18,15 @@ class LichessCLI:
     def __init__(self, lichess_api):
         self.is_running = True
         self.api = lichess_api
+        self.threads = []
+
+        self.challenge_handler = ChallengeHandler(self.api, name = "challenge_handler_thread", daemon = True)
+        self.challenge_handler.start()
+        self.threads.append(self.challenge_handler)
+
+        self.event_handler = EventHandler(self.api, name = "event_handler_thread", daemon = True)
+        self.event_handler.start()
+        self.threads.append(self.event_handler)
 
     def run(self):
         print("Welcome to the Lichess CLI tool. Please select one of the commands below: ")
@@ -30,7 +40,7 @@ class LichessCLI:
             elif (command == 2):
                 self._challenge_ai()
             elif (command == 3):
-                user = input("Enter the username: ")
+                user = input("Enter a username: ")
                 self._challenge_user(user)
             elif (command == 4):
                 self._print_menu()
@@ -49,9 +59,6 @@ class LichessCLI:
             print(f"{key}. -- {MENU_OPTIONS[key]}")
 
     def _matchmaking(self):
-        challenge_handler = ChallengeHandler(self.api, name = "challenge_handler_thread", daemon = True)
-        challenge_handler.start()
-
         online_bots = self._get_and_parse_online_bots()
         # event_stream = self._get_and_parse_event_stream()
 
@@ -71,8 +78,7 @@ class LichessCLI:
         return 0
 
     def _challenge_user(self, username):
-        response = self.api.create_challenge(username, settings.CHALLENGE_PARAMS)
-        
+        self.challenge_handler.challenge_user(username)
         
     def _quit(self):
         self.is_running = False
