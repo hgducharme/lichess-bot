@@ -1,2 +1,9 @@
 API_TOKEN = "xxxx"
 MAX_NUMBER_OF_GAMES = 1
+CHALLENGE_PARAMS = {
+    "rated": "False",
+    "days": "1",
+    "color": "random",
+    "variant": "standard",
+    "keepAliveStream: "True"
+}
