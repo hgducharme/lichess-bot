@@ -1,13 +1,16 @@
 import json
 import argparse
+from conf import settings
 
 from ChallengeHandler import ChallengeHandler
 
+# TODO: Maybe make this an enum?
 MENU_OPTIONS = {
-    1: "Matchmaking",
+    1: "Automatic matchmaking",
     2: "Challenge the AI",
-    3: "Help",
-    4: "Quit"
+    3: "Challenge a user",
+    4: "Help",
+    5: "Quit"
 }
 
 class LichessCLI:
@@ -27,8 +30,11 @@ class LichessCLI:
             elif (command == 2):
                 self._challenge_ai()
             elif (command == 3):
-                self._print_menu()
+                user = input("Enter the username: ")
+                self._challenge_user(user)
             elif (command == 4):
+                self._print_menu()
+            elif (command == 5):
                 '''
                 TODO:
                 1) Detect Ctrl-C and route it to this option
@@ -63,6 +69,10 @@ class LichessCLI:
 
     def _challenge_ai(self):
         return 0
+
+    def _challenge_user(self, username):
+        response = self.api.create_challenge(username, settings.CHALLENGE_PARAMS)
+        
         
     def _quit(self):
         self.is_running = False

@@ -8,6 +8,7 @@ class ChallengeHandler(Thread):
         self.api = lichess_api
         self.is_running = True
         self.number_of_games = 0
+        self.username_queue = []
 
     def run(self):
         while self.is_running:
@@ -23,6 +24,9 @@ class ChallengeHandler(Thread):
             else:
                 self._send_challenge()
 
+    def challenge_user(self, username = None):
+        self.username_queue.append(username)
+
     def _get_and_parse_challenges(self):
         challenges = self.api.stream_challenges()
         
@@ -37,7 +41,11 @@ class ChallengeHandler(Thread):
         return (len(incoming_challenges) > 0)
 
     def _send_challenge(self):
+        # TODO: Do we have usernames in the user queue? If so, send those users a challenge.
         online_bots = self.api.stream_online_bots()
+        # get an online bot
+        # send the challenge
 
     def _accept_challenge(self):
+        # accept first challenge
         return 0
