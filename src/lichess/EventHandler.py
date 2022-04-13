@@ -20,8 +20,7 @@ class EventHandler(Thread):
         while self.is_running:
             event_stream = self.api.stream_events()
             event_stream = self._parse_stream(event_stream)
-            self.logger.info(event_stream)
-            print(event_stream)
+            self.logger.debug(f"Event stream output: {event_stream}")
 
     def _parse_stream(self, stream):
         items_in_stream = []
