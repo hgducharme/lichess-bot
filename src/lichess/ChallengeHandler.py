@@ -19,10 +19,9 @@ class ChallengeHandler(Thread):
 
         self.logger.info("A ChallengeHandler thread has been started")
         if self.is_running == False:
-            self.is_running == True
+            self.is_running = True
 
         while self.is_running:
-            self.logger.debug("ChallengeHandler thread is running")
             if self.number_of_games == settings.MAX_NUMBER_OF_GAMES:
                 continue
 

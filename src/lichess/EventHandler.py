@@ -15,10 +15,9 @@ class EventHandler(Thread):
     def run(self):
         self.logger.info("An EventHandler thread has been started")
         if self.is_running == False:
-            self.is_running == True
+            self.is_running = True
 
         while self.is_running:
-            self.logger.debug("EventHandler thread is running")
             event_stream = self.api.stream_events()
             event_stream = self._parse_stream(event_stream)
             self.logger.info(event_stream)
