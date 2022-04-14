@@ -1,3 +1,5 @@
+import os
+
 API_TOKEN = "xxxx"
 MAX_NUMBER_OF_GAMES = 1
 MATCHMAKING = False
@@ -6,4 +8,87 @@ CHALLENGE_PARAMS = {
     "days": "1",
     "color": "random",
     "variant": "standard"
+}
+
+#################################
+# LOGGING
+#################################
+
+# This is getting this current settings file, and grabbing the next few directories above it back to the main directory
+# If this file changes location, this BASE_DIR will be wrong
+LICHESS_BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+LICHESS_LOG_DIR = os.path.join(LICHESS_BASE_DIR, "logs/")
+
+LOGGING_CONFIG = { 
+    "version": 1,
+    "disable_existing_loggers": True,
+    "formatters": { 
+        "standard": { 
+            "format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+        },
+        "error": {
+            "format": "%(asctime)s-%(levelname)s-%(name)s-%(process)d::%(module)s|%(lineno)s:: %(message)s"
+        }
+    },
+    "handlers": { 
+        "console": {
+            "class": "logging.StreamHandler",
+            "level": "ERROR",
+            "formatter": "error"
+        },
+        "error_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "ERROR",
+            "formatter": "error",
+            "filename": os.path.join(LICHESS_LOG_DIR, "errors.log"),
+            "maxBytes": 1024, # 1 KB
+            "backupCount": 1
+        },
+        "lichess": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "INFO",
+            "formatter": "standard",
+            "filename": os.path.join(LICHESS_LOG_DIR, "lichess.log"),
+            "maxBytes": 1024, # 1 KB
+            "backupCount": 1
+        },
+        "challenges": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "DEBUG",
+            "formatter": "standard",
+            "filename": os.path.join(LICHESS_LOG_DIR, "challenges.log"),
+            "maxBytes": 1024, # 1 KB
+            "backupCount": 1
+        },
+        "event_stream": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "DEBUG",
+            "formatter": "standard",
+            "filename": os.path.join(LICHESS_LOG_DIR, "event_stream.log"),
+            "maxBytes": 1024, # 1 KB
+            "backupCount": 1
+        }
+    },
+    "loggers": { 
+        "": {  # root logger
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False
+        },
+        "__main__": {  # if __name__ == "__main__"
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False
+        },
+        "lichess.ChallengeHandler": {
+            "handlers": [
+                "console",
+                "error_file",
+                "lichess",
+                "challenges",
+            ],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    } 
 }
