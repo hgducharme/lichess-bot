@@ -1,13 +1,13 @@
 import os
 
-API_TOKEN = "xxxx"
-MAX_NUMBER_OF_GAMES = 1
+API_TOKEN = "xxxxxxxxx"
+MAX_NUMBER_OF_GAMES = 5
 MATCHMAKING = False
 CHALLENGE_PARAMS = {
-    "rated": "False",
+    "rated": "false",
     "days": "1",
     "color": "random",
-    "variant": "standard"
+    "variant": "standard",
 }
 
 #################################
@@ -41,7 +41,7 @@ LOGGING_CONFIG = {
             "level": "ERROR",
             "formatter": "error",
             "filename": os.path.join(LICHESS_LOG_DIR, "errors.log"),
-            "maxBytes": 1024, # 1 KB
+            "maxBytes": 1048576, # 1 MB
             "backupCount": 1
         },
         "lichess": {
@@ -49,23 +49,23 @@ LOGGING_CONFIG = {
             "level": "INFO",
             "formatter": "standard",
             "filename": os.path.join(LICHESS_LOG_DIR, "lichess.log"),
-            "maxBytes": 1024, # 1 KB
+            "maxBytes": 1048576, # 1 MB
             "backupCount": 1
         },
-        "challenges": {
+        "challenge_handler": {
             "class": "logging.handlers.RotatingFileHandler",
             "level": "DEBUG",
             "formatter": "standard",
             "filename": os.path.join(LICHESS_LOG_DIR, "challenges.log"),
-            "maxBytes": 1024, # 1 KB
+            "maxBytes": 1048576, # 1 MB
             "backupCount": 1
         },
-        "event_stream": {
+        "event_handler": {
             "class": "logging.handlers.RotatingFileHandler",
             "level": "DEBUG",
             "formatter": "standard",
             "filename": os.path.join(LICHESS_LOG_DIR, "event_stream.log"),
-            "maxBytes": 1024, # 1 KB
+            "maxBytes": 1048576, # 1 MB
             "backupCount": 1
         }
     },
@@ -76,16 +76,26 @@ LOGGING_CONFIG = {
             "propagate": False
         },
         "__main__": {  # if __name__ == "__main__"
-            "handlers": ["console"],
+            "handlers": ["console", "error_file"],
             "level": "ERROR",
             "propagate": False
         },
-        "lichess.ChallengeHandler": {
+        "ChallengeHandler": {
             "handlers": [
                 "console",
                 "error_file",
                 "lichess",
-                "challenges",
+                "challenge_handler",
+            ],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+        "EventHandler": {
+            "handlers": [
+                "console",
+                "error_file",
+                "lichess",
+                "event_handler",
             ],
             "level": "DEBUG",
             "propagate": True,

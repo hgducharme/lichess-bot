@@ -3,21 +3,18 @@ import logging
 from conf import settings
 from threading import Thread
 
-module_logger = logging.getLogger("lichess.challenge_handler")
-
+logger = logging.getLogger(__name__)
 class ChallengeHandler(Thread):
     def __init__(self, lichess_api, **kwargs):
+        logger.info("Creating an instance of ChallengerHandler")
         Thread.__init__(self, **kwargs)
-        self.logger = logging.getLogger("lichess.challenger_handler.ChallengeHandler")
-        self.logger.info("Creating an instance of ChallengerHandler")
         self.api = lichess_api
         self.is_running = False
         self.number_of_games = 0
         self.username_queue = []
 
     def run(self):
-
-        self.logger.info("A ChallengeHandler thread has been started")
+        logger.info("A ChallengeHandler thread has been started")
         if self.is_running == False:
             self.is_running = True
 
@@ -35,8 +32,8 @@ class ChallengeHandler(Thread):
         if len(self.username_queue) > 0:
             username = self.username_queue.pop(0)
             response = self.api.create_challenge(username, settings.CHALLENGE_PARAMS)
-            self.logger.info(f"Sending a challenege request to user {username}")
-            self.logger.debug(f"Response from challenge request to {username}: {response}")
+            logger.info(f"Sending a challenege request to user {username}")
+            logger.debug(f"Response from challenge request to {username}: {response}")
 
     def _handle_automatic_matchmaking(self):
         if settings.MATCHMAKING == True:

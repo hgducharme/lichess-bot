@@ -3,6 +3,7 @@
 lichessEnv/
 config.json
 settings.py
+*.log
 
 # Prerequisites
 *.d
