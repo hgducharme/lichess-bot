@@ -22,13 +22,13 @@ if __name__ == "__main__":
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
     # Log handlers
-    challenge_handler_fh = logging.FileHandler("./src/lichess/logs/challenge_handler.log")
-    event_handler_fh = logging.FileHandler("./src/lichess/logs/event_handler.log")
-    lichess_fh = logging.FileHandler("./src/lichess/logs/lichess.log")
+    challenge_handler_fh = logging.FileHandler("./logs/challenge_handler.log")
+    event_handler_fh = logging.FileHandler("./logs/event_handler.log")
+    lichess_fh = logging.FileHandler("./logs/lichess.log")
     file_handlers = [challenge_handler_fh, event_handler_fh, lichess_fh]
 
     # Add filters
-    thread_filter = ThreadFilter()
+    thread_filter = ThreadFilter() # TODO: This breaks. Honestly just look at summer code and see how to replicate.
     challenge_handler_fh.addFilter(ThreadFilter)
     event_handler_fh.addFilter(ThreadFilter)
     
