@@ -9,23 +9,20 @@ class EventHandler(threading.Thread):
         logger.info("Creating an instance of EventHandler")
         threading.Thread.__init__(self, **kwargs)
         self.api = lichess_api
-        self.termiante = threading.Event()
+        self.terminate_flag = threading.Event()
         self.username = self.api.get_profile().json()["username"]
         logger.debug(self.username)
 
     def run(self):
         logger.info("An EventHandler thread has been started")
 
-        while not self.terminate.is_set():
+        while not self.terminate_flag.is_set():
             event_stream = self.api.stream_events()
 
             for line in event_stream:
                 if line:
                     logger.debug(f"line = {json.loads(line)}")
                     self._parse_line(line)
-
-    def _toggle_running_flag(self):
-        self.is_running = (self.is_running == False)
 
     def _parse_line(self, byte):
         line = self._parse_byte(byte)
