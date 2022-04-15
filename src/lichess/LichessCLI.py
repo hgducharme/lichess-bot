@@ -59,20 +59,8 @@ class LichessCLI:
             print(f"{key}. -- {MENU_OPTIONS[key]}")
 
     def _matchmaking(self):
-        online_bots = self._get_and_parse_online_bots()
-        # event_stream = self._get_and_parse_event_stream()
-
-    def _get_and_parse_online_bots(self):
-        online_bots = self.api.stream_online_bots()
-        online_bots = self._parse_stream(online_bots)
-
-        return online_bots
-
-    def _get_and_parse_event_stream(self):
-        event_stream = self.api.stream_events()
-        event_stream = self._parse_stream(event_stream)
-
-        return event_stream
+        # TODO: Turn on or off matchmaking
+        return 0
 
     def _challenge_ai(self):
         return 0
@@ -81,15 +69,18 @@ class LichessCLI:
         self.challenge_handler.challenge_user(username)
         
     def _quit(self):
+        self._check_for_existing_games()
+        self._close_all_threads()
         self.is_running = False
 
-    def _parse_stream(self, stream):
-        items_in_stream = []
-        for line in stream:
-            if line:
-                items_in_stream.append(json.loads(line))
+    def _check_for_existing_games(self):
+        # TODO
+        return 0
 
-        if len(items_in_stream) == 1:
-            return items_in_stream[0]
-
-        return tuple(items_in_stream)
+    def _close_all_threads(self):
+        for thread in self.threads:
+            thread.stop()
+        
+        for thread in self.threads:
+            thread.wait()
+            # TODO: self.threads.pop()
