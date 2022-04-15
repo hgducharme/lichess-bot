@@ -78,9 +78,10 @@ class LichessCLI:
         return 0
 
     def _close_all_threads(self):
-        for thread in self.threads:
-            thread.stop()
+        # for thread in self.threads:
+        #     thread.stop()
         
-        for thread in self.threads:
-            thread.wait()
-            # TODO: self.threads.pop()
+        # for thread in self.threads:
+        #     thread.wait()
+        #     # TODO: self.threads.pop()
+        return 0
