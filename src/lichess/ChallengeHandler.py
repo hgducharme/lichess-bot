@@ -1,24 +1,22 @@
 import json
 import logging
 from conf import settings
-from threading import Thread
+import threading
 
 logger = logging.getLogger(__name__)
-class ChallengeHandler(Thread):
+class ChallengeHandler(threading.Thread):
     def __init__(self, lichess_api, **kwargs):
         logger.info("Creating an instance of ChallengerHandler")
-        Thread.__init__(self, **kwargs)
+        threading.Thread.__init__(self, **kwargs)
         self.api = lichess_api
-        self.is_running = False
+        self.terminate_flag = threading.Event()
         self.number_of_games = 0
         self.username_queue = []
 
     def run(self):
         logger.info("A ChallengeHandler thread has been started")
-        if self.is_running == False:
-            self.is_running = True
 
-        while self.is_running:
+        while not self.terminate_flag.is_set():
             if self.number_of_games == settings.MAX_NUMBER_OF_GAMES:
                 continue
 
@@ -37,20 +35,24 @@ class ChallengeHandler(Thread):
 
     def _do_automatic_matchmaking(self):
         if settings.AUTO_MATCHMAKING == True:
-            self.challenges = self._get_and_parse_challenges()
+            challenges_stream = self.api.stream_challenges()
+            self.challenges = self._parse_stream(challenges_stream)
             if self._challenges_exist():
                 self._accept_challenge()
             else:
                 self._send_bot_challenge()
 
-    def _get_and_parse_challenges(self):
-        challenges = self.api.stream_challenges()
-        
-        for line in challenges:
+    def _parse_stream(self, stream):
+        items_in_stream = []
+        for line in stream:
             if line:
-                challenges = json.loads(line)
+                line = json.loads(line)
+                items_in_stream.append(line)
 
-        return challenges
+        if (len(items_in_stream) == 1):
+            return items_in_stream[0]
+
+        return tuple(items_in_stream)
 
     def _challenges_exist(self):
         incoming_challenges = self.challenges["in"]
@@ -60,4 +62,9 @@ class ChallengeHandler(Thread):
         return 0
 
     def _send_bot_challenge(self):
-        return 0
+        online_bots = self.api.stream_online_bots()
+        online_bots = self._parse_stream(online_bots)
+
+    def stop(self):
+        logger.debug(f"ChallengeHandler received a signal to terminate. Attempting to terminate...")
+        self.terminate_flag.set()

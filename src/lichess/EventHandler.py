@@ -1,24 +1,22 @@
 import json
 import logging
-from threading import Thread
+import threading
 
 logger = logging.getLogger(__name__)
 
-class EventHandler(Thread):
+class EventHandler(threading.Thread):
     def __init__(self, lichess_api, **kwargs):
         logger.info("Creating an instance of EventHandler")
-        Thread.__init__(self, **kwargs)
+        threading.Thread.__init__(self, **kwargs)
         self.api = lichess_api
-        self.is_running = False
+        self.termiante = threading.Event()
         self.username = self.api.get_profile().json()["username"]
         logger.debug(self.username)
 
     def run(self):
         logger.info("An EventHandler thread has been started")
 
-        self._toggle_running_flag()
-
-        while self.is_running:
+        while not self.terminate.is_set():
             event_stream = self.api.stream_events()
 
             for line in event_stream:
@@ -29,21 +27,25 @@ class EventHandler(Thread):
     def _toggle_running_flag(self):
         self.is_running = (self.is_running == False)
 
-    def _parse_line(self, line):
-        category = line["type"]
-        if category == "challenge":
+    def _parse_line(self, byte):
+        line = self._parse_byte(byte)
+        event_type = line["type"]
+        if event_type == "challenge":
             if self.is_external_challenge(line):
                 # TODO: Isn't this handled in the ChallengeHandler?
                 return 0
             return 0
-        if category == "challengeDeclined":
+        if event_type == "challengeDeclined":
             return 0
-        if category == "gameStart":
+        if event_type == "gameStart":
             return 0
-        if category == "gameFinish":
+        if event_type == "gameFinish":
             return 0
-        if category == "challengeCancelled":
+        if event_type == "challengeCancelled":
             return 0
+
+    def _parse_byte(self, byte):
+        return json.loads(str(byte, "utf-8"))
 
     def is_external_challenge(self, line):
         is_external_challenge = True
