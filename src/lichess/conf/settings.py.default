@@ -1,9 +1,9 @@
 import os
 
-API_TOKEN = "xxxxxxxxx"
+API_TOKEN = "xxxxxx"
 MAX_NUMBER_OF_GAMES = 5
-MATCHMAKING = False
-CHALLENGE_PARAMS = {
+AUTO_MATCHMAKING = False
+USER_CHALLENGE_PARAMS = {
     "rated": "false",
     "days": "1",
     "color": "random",
@@ -34,7 +34,8 @@ LOGGING_CONFIG = {
         "console": {
             "class": "logging.StreamHandler",
             "level": "ERROR",
-            "formatter": "error"
+            "formatter": "error",
+            "stream": "sys.stdout"
         },
         "error_file": {
             "class": "logging.handlers.RotatingFileHandler",
@@ -46,7 +47,7 @@ LOGGING_CONFIG = {
         },
         "lichess": {
             "class": "logging.handlers.RotatingFileHandler",
-            "level": "INFO",
+            "level": "DEBUG",
             "formatter": "standard",
             "filename": os.path.join(LICHESS_LOG_DIR, "lichess.log"),
             "maxBytes": 1048576, # 1 MB
@@ -56,7 +57,7 @@ LOGGING_CONFIG = {
             "class": "logging.handlers.RotatingFileHandler",
             "level": "DEBUG",
             "formatter": "standard",
-            "filename": os.path.join(LICHESS_LOG_DIR, "challenges.log"),
+            "filename": os.path.join(LICHESS_LOG_DIR, "challenge_handler.log"),
             "maxBytes": 1048576, # 1 MB
             "backupCount": 1
         },
@@ -64,14 +65,14 @@ LOGGING_CONFIG = {
             "class": "logging.handlers.RotatingFileHandler",
             "level": "DEBUG",
             "formatter": "standard",
-            "filename": os.path.join(LICHESS_LOG_DIR, "event_stream.log"),
+            "filename": os.path.join(LICHESS_LOG_DIR, "event_handler.log"),
             "maxBytes": 1048576, # 1 MB
             "backupCount": 1
         }
     },
     "loggers": { 
         "": {  # root logger
-            "handlers": ["console"],
+            "handlers": ["console", "error_file"],
             "level": "WARNING",
             "propagate": False
         },

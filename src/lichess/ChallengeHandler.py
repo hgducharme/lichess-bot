@@ -32,11 +32,11 @@ class ChallengeHandler(Thread):
         if len(self.username_queue) > 0:
             username = self.username_queue.pop(0)
             logger.info(f"Sending a challenege request to user {username}")
-            response = self.api.create_challenge(username, settings.CHALLENGE_PARAMS)
+            response = self.api.create_challenge(username, settings.USER_CHALLENGE_PARAMS)
             logger.info(f"Response from challenge request to {username}: {response}")
 
     def _handle_automatic_matchmaking(self):
-        if settings.MATCHMAKING == True:
+        if settings.AUTO_MATCHMAKING == True:
             self.challenges = self._get_and_parse_challenges()
             if self._challenges_exist():
                 self._accept_challenge()
