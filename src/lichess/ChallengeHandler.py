@@ -23,7 +23,7 @@ class ChallengeHandler(Thread):
                 continue
 
             self._send_user_challenge()
-            self._handle_automatic_matchmaking()
+            self._do_automatic_matchmaking()
 
     def challenge_user(self, username = None):
         self.username_queue.append(username)
@@ -35,7 +35,7 @@ class ChallengeHandler(Thread):
             response = self.api.create_challenge(username, settings.USER_CHALLENGE_PARAMS)
             logger.info(f"Response from challenge request to {username}: {response}")
 
-    def _handle_automatic_matchmaking(self):
+    def _do_automatic_matchmaking(self):
         if settings.AUTO_MATCHMAKING == True:
             self.challenges = self._get_and_parse_challenges()
             if self._challenges_exist():
