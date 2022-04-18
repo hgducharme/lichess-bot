@@ -8,9 +8,9 @@ class ContinuousWorker(threading.Thread):
     __metaclass__ = ABCMeta
 
     def __init__(self, *args, **kwargs):
-        logger.debug("Creating an instance of {self.__class__.__name__}")
-        self.Thread.__init__(args, kwargs)
-        self.termiante_flag = threading.Event()
+        logger.debug(f"Creating an instance of {self.__class__.__name__}")
+        super().__init__(*args, **kwargs)
+        self.terminate_flag = threading.Event()
 
     def run(self):
         logger.debug(f"A {self.__class__.__name__} thread has been started")
@@ -22,5 +22,5 @@ class ContinuousWorker(threading.Thread):
         return
 
     def stop(self):
-        logger.debug(f"ChallengeHandler received a signal to terminate. Attempting to terminate...")
+        logger.debug(f"{self.__class__.__name__} received a signal to terminate. Attempting to terminate...")
         self.terminate_flag.set()

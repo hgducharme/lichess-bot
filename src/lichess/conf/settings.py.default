@@ -1,6 +1,10 @@
 import os
 
-API_TOKEN = "xxxxxx"
+#################################
+# LICHESS
+#################################
+
+API_TOKEN = "xxxxxxxx"
 MAX_NUMBER_OF_GAMES = 5
 AUTO_MATCHMAKING = False
 USER_CHALLENGE_PARAMS = {
@@ -89,7 +93,7 @@ LOGGING_CONFIG = {
                 "challenge_handler",
             ],
             "level": "DEBUG",
-            "propagate": True,
+            "propagate": False,
         },
         "EventHandler": {
             "handlers": [
@@ -99,7 +103,12 @@ LOGGING_CONFIG = {
                 "event_handler",
             ],
             "level": "DEBUG",
-            "propagate": True,
+            "propagate": False,
         },
+        "ContinuousWorker": {
+            "handlers": ["console", "error_file", "lichess"],
+            "level": "DEBUG",
+            "propagate": False
+        }
     } 
 }

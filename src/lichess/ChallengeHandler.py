@@ -1,27 +1,24 @@
 import json
 import logging
 from conf import settings
-import threading
+from ContinuousWorker import ContinuousWorker
 
 logger = logging.getLogger(__name__)
-class ChallengeHandler(threading.Thread):
-    def __init__(self, lichess_api, **kwargs):
-        logger.info("Creating an instance of ChallengerHandler")
-        threading.Thread.__init__(self, **kwargs)
+
+class ChallengeHandler(ContinuousWorker):
+    def __init__(self, lichess_api, *args, **kwargs):
+        logger.debug(logger.name)
+        super().__init__(*args, **kwargs)
         self.api = lichess_api
-        self.terminate_flag = threading.Event()
         self.number_of_games = 0
         self.username_queue = []
 
-    def run(self):
-        logger.info("A ChallengeHandler thread has been started")
+    def work(self):
+        if self.number_of_games == settings.MAX_NUMBER_OF_GAMES:
+            return
 
-        while not self.terminate_flag.is_set():
-            if self.number_of_games == settings.MAX_NUMBER_OF_GAMES:
-                continue
-
-            self._send_user_challenge()
-            self._do_automatic_matchmaking()
+        self._send_user_challenge()
+        self._do_automatic_matchmaking()
 
     def challenge_user(self, username = None):
         self.username_queue.append(username)
@@ -64,7 +61,3 @@ class ChallengeHandler(threading.Thread):
     def _send_bot_challenge(self):
         online_bots = self.api.stream_online_bots()
         online_bots = self._parse_stream(online_bots)
-
-    def stop(self):
-        logger.debug(f"ChallengeHandler received a signal to terminate. Attempting to terminate...")
-        self.terminate_flag.set()

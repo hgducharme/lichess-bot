@@ -1,29 +1,23 @@
 import json
 import logging
-import threading
+from ContinuousWorker import ContinuousWorker
 
 logger = logging.getLogger(__name__)
 
-class EventHandler(threading.Thread):
-    def __init__(self, lichess_api, **kwargs):
-        logger.info("Creating an instance of EventHandler")
-        threading.Thread.__init__(self, **kwargs)
+class EventHandler(ContinuousWorker):
+    def __init__(self, lichess_api, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.api = lichess_api
-        self.terminate_flag = threading.Event()
         self.username = self.api.get_profile().json()["username"]
-        logger.debug(self.username)
 
-    def run(self):
-        logger.info("An EventHandler thread has been started")
+    def work(self):
+        event_stream = self.api.stream_events()
 
-        while not self.terminate_flag.is_set():
-            event_stream = self.api.stream_events()
-
-            for line in event_stream:
-                if line:
-                    logger.debug(f"line = {json.loads(line)}")
-                    self._parse_line(line)
-
+        for line in event_stream:
+            if line:
+                logger.debug(f"line = {json.loads(line)}")
+                self._parse_line(line)
+    
     def _parse_line(self, byte):
         line = self._parse_byte(byte)
         event_type = line["type"]
