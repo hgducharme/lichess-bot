@@ -22,26 +22,17 @@ class EventHandler(ContinuousWorker):
         line = self._parse_byte(byte)
         event_type = line["type"]
         if event_type == "challenge":
-            if self.is_external_challenge(line):
-                # TODO: Isn't this handled in the ChallengeHandler?
-                return 0
-            return 0
+            # The ChallengeHandler class handles all incoming and outgoing challenges, so we will skip this event type
+            return
         if event_type == "challengeDeclined":
-            return 0
+            return
         if event_type == "gameStart":
-            return 0
+            # TODO: Spawn a GameHandler (?)
+            return
         if event_type == "gameFinish":
-            return 0
+            return
         if event_type == "challengeCancelled":
-            return 0
+            return
 
     def _parse_byte(self, byte):
         return json.loads(str(byte, "utf-8"))
-
-    def is_external_challenge(self, line):
-        is_external_challenge = True
-        challenger = line["challenge"]["challenger"]["name"]
-        if challenger == self.username:
-            is_external_challenge = False
-
-        return is_external_challenge
