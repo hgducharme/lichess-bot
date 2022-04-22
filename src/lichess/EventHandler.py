@@ -5,9 +5,10 @@ from ContinuousWorker import ContinuousWorker
 logger = logging.getLogger(__name__)
 
 class EventHandler(ContinuousWorker):
-    def __init__(self, lichess_api, *args, **kwargs):
+    def __init__(self, lichess_api, game_manager, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.api = lichess_api
+        self.game_manager = game_manager
         self.username = self.api.get_profile().json()["username"]
 
     def work(self):
@@ -27,7 +28,7 @@ class EventHandler(ContinuousWorker):
         if event_type == "challengeDeclined":
             return
         if event_type == "gameStart":
-            # TODO: Spawn a GameHandler (?)
+            self.game_manager.start_new_game(line)
             return
         if event_type == "gameFinish":
             return

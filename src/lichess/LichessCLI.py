@@ -3,6 +3,7 @@ from conf import settings
 
 from ChallengeHandler import ChallengeHandler
 from EventHandler import EventHandler
+from GameManager import GameManager
 
 # TODO: Maybe make this an enum?
 MENU_OPTIONS = {
@@ -19,11 +20,13 @@ class LichessCLI:
         self.api = lichess_api
         self.threads = []
 
+        self.game_manager = GameManager()
+
         self.challenge_handler = ChallengeHandler(self.api, name = "challenge_handler_thread", daemon = True)
         self.challenge_handler.start()
         self.threads.append(self.challenge_handler)
 
-        self.event_handler = EventHandler(self.api, name = "event_handler_thread", daemon = True)
+        self.event_handler = EventHandler(self.api, self.game_manager, name = "event_handler_thread", daemon = True)
         self.event_handler.start()
         self.threads.append(self.event_handler)
 
