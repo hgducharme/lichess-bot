@@ -1,10 +1,3 @@
-import logging
-from conf import settings
-
-from ChallengeStreamWatcher import ChallengeStreamWatcher
-from EventStreamWatcher import EventStreamWatcher
-from GameManager import GameManager
-
 # TODO: Maybe make this an enum?
 MENU_OPTIONS = {
     1: "Automatic matchmaking",
