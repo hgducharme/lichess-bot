@@ -5,16 +5,16 @@ from ContinuousWorker import ContinuousWorker
 
 logger = logging.getLogger(__name__)
 
-class ChallengeHandler(ContinuousWorker):
-    def __init__(self, lichess_api, *args, **kwargs):
+class ChallengeStreamWatcher(ContinuousWorker):
+    def __init__(self, lichess_api, game_manager, *args, **kwargs):
         logger.debug(logger.name)
         super().__init__(*args, **kwargs)
         self.api = lichess_api
-        self.number_of_games = 0
+        self.game_manager = game_manager
         self.username_queue = []
 
     def work(self):
-        if self.number_of_games == settings.MAX_NUMBER_OF_GAMES:
+        if self.game_manager.number_of_games() == settings.MAX_NUMBER_OF_GAMES:
             return
 
         self._send_user_challenge()

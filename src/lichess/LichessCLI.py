@@ -1,8 +1,8 @@
 import logging
 from conf import settings
 
-from ChallengeHandler import ChallengeHandler
-from EventHandler import EventHandler
+from ChallengeStreamWatcher import ChallengeStreamWatcher
+from EventStreamWatcher import EventStreamWatcher
 from GameManager import GameManager
 
 # TODO: Maybe make this an enum?
@@ -15,20 +15,12 @@ MENU_OPTIONS = {
 }
 
 class LichessCLI:
-    def __init__(self, lichess_api):
+    def __init__(self, lichess_api, game_manager, challenge_stream_watcher, event_stream_watcher, threads):
         self.is_running = True
         self.api = lichess_api
-        self.threads = []
-
-        self.game_manager = GameManager()
-
-        self.challenge_handler = ChallengeHandler(self.api, name = "challenge_handler_thread", daemon = True)
-        self.challenge_handler.start()
-        self.threads.append(self.challenge_handler)
-
-        self.event_handler = EventHandler(self.api, self.game_manager, name = "event_handler_thread", daemon = True)
-        self.event_handler.start()
-        self.threads.append(self.event_handler)
+        self.game_manager = game_manager
+        self.challenge_stream_watcher = challenge_stream_watcher
+        self.event_stream_watcher = event_stream_watcher
 
     def run(self):
         print("Welcome to the Lichess CLI tool. Please select one of the commands below: ")
@@ -68,16 +60,13 @@ class LichessCLI:
         return 0
 
     def _challenge_user(self, username):
-        self.challenge_handler.challenge_user(username)
+        self.challenge_stream_watcher.challenge_user(username)
         
     def _quit(self):
-        self._check_for_existing_games()
+        if self.game_manager.do_games_exist():
+            print("Sorry, there's still games currently running. This will close once the games finish...")
         self._close_all_threads()
         self.is_running = False
-
-    def _check_for_existing_games(self):
-        # TODO
-        return 0
 
     def _close_all_threads(self):
         # for thread in self.threads:

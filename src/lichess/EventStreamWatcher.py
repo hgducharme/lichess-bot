@@ -4,7 +4,7 @@ from ContinuousWorker import ContinuousWorker
 
 logger = logging.getLogger(__name__)
 
-class EventHandler(ContinuousWorker):
+class EventStreamWatcher(ContinuousWorker):
     def __init__(self, lichess_api, game_manager, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.api = lichess_api

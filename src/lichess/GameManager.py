@@ -10,7 +10,10 @@ class GameManager:
         self.games[game_id] = game
 
     def do_games_exist(self):
-        if (len(self.games) > 0):
+        if (self.number_of_games() > 0):
             return True
         
         return False
+    
+    def number_of_games(self):
+        return len(self.games)
