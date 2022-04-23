@@ -14,7 +14,7 @@ def main():
 
     # Initialize classes
     api = LichessAPI(settings.API_TOKEN)
-    game_manager = GameManager()
+    game_manager = GameManager(api)
     challenge_stream_watcher = ChallengeStreamWatcher(api, game_manager, name = "challenge_stream_watcher", daemon = True)
     event_stream_watcher = EventStreamWatcher(api, game_manager, name = "event_stream_watcher", daemon = True)
 

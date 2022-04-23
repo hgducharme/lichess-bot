@@ -1,9 +1,5 @@
 import os
 
-#################################
-# LICHESS
-#################################
-
 API_TOKEN = "xxxxxxxx"
 MAX_NUMBER_OF_GAMES = 5
 AUTO_MATCHMAKING = False
@@ -106,6 +102,11 @@ LOGGING_CONFIG = {
             "propagate": False,
         },
         "ContinuousWorker": {
+            "handlers": ["console", "error_file", "lichess"],
+            "level": "DEBUG",
+            "propagate": False
+        },
+        "GameManager": {
             "handlers": ["console", "error_file", "lichess"],
             "level": "DEBUG",
             "propagate": False
