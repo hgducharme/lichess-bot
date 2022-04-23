@@ -13,7 +13,9 @@ URL_ENDPOINTS = {
     "accept_challenge": "challenge/<challengeId>/accept",
     "decline_challenge": "challenge/<challengeId>/decline",
     "stream_online_bots": "bot/online",
-    "stream_events": "stream/event"
+    "stream_events": "stream/event",
+    "abort_game": "bot/game/<gameId>/abort",
+    "resign_game": "bot/game/<gameId>/resign"
 }
 
 class LichessAPI():
@@ -66,18 +68,10 @@ class LichessAPI():
         return response
 
     def stream_game_state(self, gameId):
-
-        '''
-        TODO: I think we need to stream like this?
-
-        with requests.get(url, stream=True) as r:
-            # Do things with the response here.
-
-        '''
         url = self._construct_url(URL_ENDPOINTS["stream_bot_game_state"], gameId = gameId)
-        response = self.session.post(url)
+        response = self.session.post(url, stream = True)
 
-        return response
+        return response.iter_lines()
 
     def stream_challenges(self):
         url = self._construct_url(URL_ENDPOINTS["stream_challenges"])
@@ -121,3 +115,15 @@ class LichessAPI():
         response = self.session.get(url, stream = True)
 
         return response.iter_lines()
+
+    def abort_game(self, gameId):
+        url = self._construct_url(URL_ENDPOINTS["abort_game"], gameId = gameId)
+        response = self.session.post(url)
+
+        return response
+
+    def resign_game(self, gameId):
+        url = self._construct_url(URL_ENDPOINTS["resign_game"], gameId = gameId)
+        response = self.session.post(url)
+
+        return response
