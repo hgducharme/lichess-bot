@@ -57,7 +57,7 @@ class LichessCLI:
         
     def _quit(self):
         if self.game_manager.do_games_exist():
-            print(f"The program will close once all the games finish. There are currently {self.game_manager.number_of_games()} game(s) being played...")
+            print(f"There are currently {self.game_manager.number_of_games()} game(s) being played. The program will close once all the games finish...")
         self._close_all_threads()
         self.is_running = False
 
