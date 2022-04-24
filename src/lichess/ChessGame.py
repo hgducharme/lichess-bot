@@ -9,6 +9,7 @@ class ChessGame(ContinuousWorker):
         super().__init__(*args, **kwargs)
         self.api = lichess_api
         self.info = game_info
+        self.color = game_info["game"]["color"]
         self.game_id = self.info["game"]["fullId"]
 
     def work(self):
@@ -28,7 +29,20 @@ class ChessGame(ContinuousWorker):
             pass
         elif line_type == "gameState":
             self.game_state = line
+            our_turn = self.is_it_our_turn()
         return
+
+    def is_it_our_turn(self):
+        # If we're white and there is an even number recorded of moves, then it's our turn.
+        # If we're black and there is an odd number recorded of moves, then it's our turn.
+
+        number_of_moves = self.get_number_of_moves()
+        if (self.color == "white" and number_of_moves % 2 == 0):
+            return True
+        elif (self.color == "black" and number_of_moves % 2 != 0):
+            return True
+
+        return False
 
     def _cleanup(self):
         # If the game is currently running, then abort or resign. Otherwise, do nothing
