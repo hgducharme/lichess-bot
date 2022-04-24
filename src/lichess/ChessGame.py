@@ -50,6 +50,6 @@ class ChessGame(ContinuousWorker):
         return len(self.get_moves())
 
     def get_moves(self):
-        # Sample moves string from the Lichess API: "e2e4 c7c5 f2f4 d7d6 ..."
+        # A "moves" string from the Lichess API will look like: "e2e4 c7c5 f2f4 d7d6 ..."
         moves = tuple(self.game_state["moves"].strip().split(" "))
         return moves
