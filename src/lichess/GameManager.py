@@ -34,6 +34,9 @@ class GameManager:
         try:
             game = self.games[game_id]
             game.stop()
+            game.join()
+            # TODO: I don't think this is the right way to join to the thread.
+            # Read the documentation on how to join to the thread.
         except KeyError as err:
             logger.error(f"Tried to terminate game {game_id}, but it is not saved in the list of games.")
             pass
