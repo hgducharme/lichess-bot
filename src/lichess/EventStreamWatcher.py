@@ -31,8 +31,9 @@ class EventStreamWatcher(ContinuousWorker):
         if event_type == "challengeDeclined":
             return
         if event_type == "gameStart":
+            logger.info("Starting a new game.")
             self.game_manager.start_new_game(line)
         if event_type == "gameFinish":
-            self.game_manager.terminate_game(line)
+            self.game_manager.terminate_game(line["game"]["gameId"])
         if event_type == "challengeCancelled":
             return

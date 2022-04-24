@@ -14,6 +14,7 @@ class GameManager:
         game = ChessGame(self.api, game_info)
         game_id = game_info["game"]["fullId"]
         self.games[game_id] = game
+        game.run()
 
     def do_games_exist(self):
         if (self.number_of_games() > 0):
@@ -24,11 +25,15 @@ class GameManager:
     def number_of_games(self):
         return len(self.games)
 
+    def terminate_all_games(self):
+        for game_id in self.games:
+            self.terminate_game(game_id)
+
     def terminate_game(self, game_id):
-        logger.info(f"GameManager is attempting to terminate game: {game_id}...")
+        logger.info(f"GameManager is attempting to terminate game {game_id}...")
         try:
             game = self.games[game_id]
             game.stop()
         except KeyError as err:
-            logger.error(f"Tried to terminate game ID {game_id}, but it is not saved in the list of games.")
+            logger.error(f"Tried to terminate game {game_id}, but it is not saved in the list of games.")
             pass
