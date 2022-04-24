@@ -22,5 +22,9 @@ class ContinuousWorker(threading.Thread):
         return
 
     def stop(self):
-        logger.debug(f"{self.__class__.__name__} received a signal to terminate. Attempting to terminate...")
+        logger.debug(f"{self.__class__.__name__} received a signal to terminate. Terminating...")
+        self._cleanup()
         self.terminate_flag.set()
+
+    def _cleanup(self):
+        return
