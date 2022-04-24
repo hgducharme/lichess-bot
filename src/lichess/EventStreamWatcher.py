@@ -16,11 +16,14 @@ class EventStreamWatcher(ContinuousWorker):
 
         for line in event_stream:
             if line:
-                logger.debug(f"line = {json.loads(line)}")
-                self._parse_line(line)
+                logger.debug(f"From event stream: {json.loads(line)}")
+                line = self._parse_byte(line)
+                self._dispatch_event_action(line)
+
+    def _parse_byte(self, byte):
+        return json.loads(str(byte, "utf-8"))
     
-    def _parse_line(self, byte):
-        line = self._parse_byte(byte)
+    def _dispatch_event_action(self, line):
         event_type = line["type"]
         if event_type == "challenge":
             # The ChallengeHandler class handles all incoming and outgoing challenges, so we will skip this event type
@@ -29,11 +32,7 @@ class EventStreamWatcher(ContinuousWorker):
             return
         if event_type == "gameStart":
             self.game_manager.start_new_game(line)
-            return
         if event_type == "gameFinish":
-            return
+            self.game_manager.terminate_game(line)
         if event_type == "challengeCancelled":
             return
-
-    def _parse_byte(self, byte):
-        return json.loads(str(byte, "utf-8"))
