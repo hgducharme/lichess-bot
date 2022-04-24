@@ -72,7 +72,7 @@ class LichessAPI():
 
     def stream_game_state(self, gameId):
         url = self._construct_url(URL_ENDPOINTS["stream_bot_game_state"], gameId = gameId)
-        response = self.session.post(url, stream = True)
+        response = self.session.get(url, stream = True)
 
         return response.iter_lines()
 
@@ -135,6 +135,6 @@ class LichessAPI():
 
         status_code = response.status_code
         response_message = response.json()
-        logger.debug(f"Resign game response: {status_code} - {response_message}")
+        logger.debug(f"Resignation response: {status_code} - {response_message}")
 
         return response
