@@ -14,7 +14,7 @@ class GameManager:
         game = ChessGame(self.api, game_info)
         game_id = game_info["game"]["fullId"]
         self.games[game_id] = game
-        game.run()
+        game.start()
 
     def do_games_exist(self):
         if (self.number_of_games() > 0):
@@ -35,8 +35,7 @@ class GameManager:
             game = self.games[game_id]
             game.stop()
             game.join()
-            # TODO: I don't think this is the right way to join to the thread.
-            # Read the documentation on how to join to the thread.
+            del self.games[game_id]
         except KeyError as err:
             logger.error(f"Tried to terminate game {game_id}, but it is not saved in the list of games.")
             pass

@@ -26,6 +26,8 @@ class ChessGame(ContinuousWorker):
     def _dispatch_action(self, line):
         line_type = line["type"]
         if line_type == "gameFull":
+            self.full_game_info = line
+            self.game_state = line["state"]
             pass
         elif line_type == "gameState":
             self.game_state = line
