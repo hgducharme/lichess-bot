@@ -33,7 +33,7 @@ class ChessGame(ContinuousWorker):
     def _cleanup(self):
         # If the game is currently running, then abort or resign. Otherwise, do nothing
         if self.game_state["status"] == "started":
-            self._resign_or_abort()
+            self._abort_or_resign()
 
     def _abort_or_resign(self):
         number_of_moves = self.get_number_of_moves()
