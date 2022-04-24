@@ -1,3 +1,7 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 # TODO: Maybe make this an enum?
 MENU_OPTIONS = {
     1: "Automatic matchmaking",
@@ -56,8 +60,21 @@ class LichessCLI:
         self.challenge_stream_watcher.challenge_user(username)
         
     def _quit(self):
+        logger.info("Quitting the program.")
         if self.game_manager.do_games_exist():
-            print(f"There are currently {self.game_manager.number_of_games()} game(s) being played. The program will close once all the games finish...")
+            command = input(f"There are currently {self.game_manager.number_of_games()} game(s) being played. Do you want to terminate all games? (y/n): ")
+
+            valid_commands = ("yes", "y", "no", "n")
+            while (command.strip().lower() not in valid_commands):
+                command = input("(y/n): ")
+
+            if command == "y" or command == "yes":
+                print("Terminating all games...")
+                self.game_manager.terminate_all_games()
+            elif command == "n" or command == "no":
+                print("The program will end once all games have finished...")
+                # TODO: Block until all games have finished
+
         self._close_all_threads()
         self.is_running = False
 
