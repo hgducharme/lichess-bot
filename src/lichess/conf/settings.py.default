@@ -106,7 +106,12 @@ LOGGING_CONFIG = {
             "level": "DEBUG",
             "propagate": False
         },
-        "GameManager": {
+        "ChessGame": {
+            "handlers": ["console", "error_file", "lichess"],
+            "level": "DEBUG",
+            "propagate": False
+        },
+        "LichessAPI": {
             "handlers": ["console", "error_file", "lichess"],
             "level": "DEBUG",
             "propagate": False

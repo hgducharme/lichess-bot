@@ -1,5 +1,8 @@
 import re
 import requests
+import logging
+
+logger = logging.getLogger(__name__)
 
 API_BASE_URL = "https://lichess.org/api/"
 URL_ENDPOINTS = {
@@ -120,10 +123,18 @@ class LichessAPI():
         url = self._construct_url(URL_ENDPOINTS["abort_game"], gameId = gameId)
         response = self.session.post(url)
 
+        status_code = response.status_code
+        response_message = response.json()
+        logger.debug(f"Abort game response: {status_code} - {response_message}")
+
         return response
 
     def resign_game(self, gameId):
         url = self._construct_url(URL_ENDPOINTS["resign_game"], gameId = gameId)
         response = self.session.post(url)
+
+        status_code = response.status_code
+        response_message = response.json()
+        logger.debug(f"Resign game response: {status_code} - {response_message}")
 
         return response
