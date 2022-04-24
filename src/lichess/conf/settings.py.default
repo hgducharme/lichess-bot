@@ -53,22 +53,22 @@ LOGGING_CONFIG = {
             "maxBytes": 1048576, # 1 MB
             "backupCount": 1
         },
-        "challenge_handler": {
-            "class": "logging.handlers.RotatingFileHandler",
-            "level": "DEBUG",
-            "formatter": "standard",
-            "filename": os.path.join(LICHESS_LOG_DIR, "challenge_handler.log"),
-            "maxBytes": 1048576, # 1 MB
-            "backupCount": 1
-        },
-        "event_handler": {
-            "class": "logging.handlers.RotatingFileHandler",
-            "level": "DEBUG",
-            "formatter": "standard",
-            "filename": os.path.join(LICHESS_LOG_DIR, "event_handler.log"),
-            "maxBytes": 1048576, # 1 MB
-            "backupCount": 1
-        }
+        # "challenge_handler": {
+        #     "class": "logging.handlers.RotatingFileHandler",
+        #     "level": "DEBUG",
+        #     "formatter": "standard",
+        #     "filename": os.path.join(LICHESS_LOG_DIR, "challenge_handler.log"),
+        #     "maxBytes": 1048576, # 1 MB
+        #     "backupCount": 1
+        # },
+        # "event_handler": {
+        #     "class": "logging.handlers.RotatingFileHandler",
+        #     "level": "DEBUG",
+        #     "formatter": "standard",
+        #     "filename": os.path.join(LICHESS_LOG_DIR, "event_handler.log"),
+        #     "maxBytes": 1048576, # 1 MB
+        #     "backupCount": 1
+        # }
     },
     "loggers": { 
         "": {  # root logger
@@ -77,26 +77,24 @@ LOGGING_CONFIG = {
             "propagate": False
         },
         "__main__": {  # if __name__ == "__main__"
-            "handlers": ["console", "error_file"],
+            "handlers": ["console", "error_file", "lichess"],
             "level": "ERROR",
             "propagate": False
         },
-        "ChallengeHandler": {
+        "ChallengeStreamWatcher": {
             "handlers": [
                 "console",
                 "error_file",
                 "lichess",
-                "challenge_handler",
             ],
             "level": "DEBUG",
             "propagate": False,
         },
-        "EventHandler": {
+        "EventStreamWatcher": {
             "handlers": [
                 "console",
                 "error_file",
                 "lichess",
-                "event_handler",
             ],
             "level": "DEBUG",
             "propagate": False,
@@ -115,6 +113,11 @@ LOGGING_CONFIG = {
             "handlers": ["console", "error_file", "lichess"],
             "level": "DEBUG",
             "propagate": False
-        }
+        },
+        "LichessCLI": {
+            "handlers": ["console", "error_file", "lichess"],
+            "level": "DEBUG",
+            "propagate": False
+        },
     } 
 }
