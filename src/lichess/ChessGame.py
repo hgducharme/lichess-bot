@@ -32,6 +32,11 @@ class ChessGame(ContinuousWorker):
         elif line_type == "gameState":
             self.game_state = line
             our_turn = self.is_it_our_turn()
+            if (our_turn):
+                # TODO: Send the updated board game state to the engine
+                # best_move = engine.get_move()
+                # self.api.move(best_move)
+                pass
         return
 
     def is_it_our_turn(self):
