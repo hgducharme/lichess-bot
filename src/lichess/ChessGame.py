@@ -19,29 +19,32 @@ class ChessGame(ContinuousWorker):
             if line:
                 logger.debug(f"From game stream: {json.loads(line)}")
                 line = self._parse_byte(line)
-                self._dispatch_action(line)
+                self._store_game_state(line)
+                self._move()
 
     def _parse_byte(self, byte):
         return json.loads(str(byte, "utf-8"))
 
-    def _dispatch_action(self, line):
+    def _store_game_state(self, line):
         line_type = line["type"]
         if line_type == "gameFull":
             self.full_game_info = line
             self.game_state = line["state"]
-            # self.engine.set_fen_position(self.full_game_info["game"]["fen"])
         elif line_type == "gameState":
             self.game_state = line
-            our_turn = self.is_it_our_turn()
-            if (our_turn):
-                logger.debug("It's our turn. Getting move from engine...")
-                moves = self.get_moves()
-                self.engine.set_position(moves)
-                best_move = self.engine.get_best_move(wtime = self.game_state["wtime"], btime = self.game_state["btime"])
-                logger.debug(f"Best move = {best_move}")
-                self.api.move(self.game_id, best_move)
+        else:
+            pass
 
-    def is_it_our_turn(self):
+    def _move(self):
+        if (self.is_our_turn()):
+            logger.debug("It's our turn. Getting move from engine...")
+            moves = self.get_moves()
+            self.engine.set_position(moves)
+            best_move = self.engine.get_best_move(wtime = self.game_state["wtime"], btime = self.game_state["btime"])
+            logger.debug(f"Best move = {best_move}")
+            self.api.move(self.game_id, best_move)
+
+    def is_our_turn(self):
         # If we're white and there is an even number recorded of moves, then it's our turn.
         # If we're black and there is an odd number recorded of moves, then it's our turn.
 
