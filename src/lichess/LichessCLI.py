@@ -18,6 +18,7 @@ class LichessCLI:
         self.game_manager = game_manager
         self.challenge_stream_watcher = challenge_stream_watcher
         self.event_stream_watcher = event_stream_watcher
+        self.threads = threads
 
     def run(self):
         print("Welcome to the Lichess CLI tool. Please select one of the commands below: ")

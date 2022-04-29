@@ -34,7 +34,7 @@ class GameManager:
     def number_of_games(self):
         return len(self.games)
 
-    def terminate_all_games(self, wait = True):
+    def terminate(self, wait = True):
         for game_id in list(self.games.keys()):
             self.terminate_game(game_id, wait)
 
