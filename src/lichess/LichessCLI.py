@@ -70,19 +70,17 @@ class LichessCLI:
 
             if command == "y" or command == "yes":
                 print("Terminating all games...")
-                self.game_manager.terminate_all_games()
+                self.game_manager.terminate(wait = False)
             elif command == "n" or command == "no":
                 print("The program will end once all games have finished...")
-                # TODO: Block until all games have finished
+                self.game_manager.terminate(wait = True)
 
         self._close_all_threads()
         self.is_running = False
 
     def _close_all_threads(self):
-        # for thread in self.threads:
-        #     thread.stop()
+        for thread in self.threads:
+            thread.stop()
         
-        # for thread in self.threads:
-        #     thread.wait()
-        #     # TODO: self.threads.pop()
-        return 0
+        for thread in self.threads:
+            thread.join()
