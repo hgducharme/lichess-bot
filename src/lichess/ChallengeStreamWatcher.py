@@ -61,3 +61,7 @@ class ChallengeStreamWatcher(ContinuousWorker):
     def _send_bot_challenge(self):
         online_bots = self.api.stream_online_bots()
         online_bots = self._parse_stream(online_bots)
+
+    def _cleanup(self):
+        # TODO: Cleanup resources
+        return

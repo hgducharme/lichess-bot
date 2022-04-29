@@ -32,10 +32,17 @@ class EventStreamWatcher(ContinuousWorker):
             pass
         elif event_type == "gameStart":
             logger.info("Starting a new game.")
-            self.game_manager.start_new_game(line)
+            game_started = self.game_manager.start_new_game(line)
+            if (not game_started):
+                # TODO: decline the game
+                pass
         elif event_type == "gameFinish":
             self.game_manager.terminate_game(line["game"]["gameId"])
         elif event_type == "challengeCancelled":
             pass
         else:
             pass
+
+    def _cleanup(self):
+        # TODO: Cleanup resources
+        return
