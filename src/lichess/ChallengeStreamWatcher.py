@@ -27,7 +27,7 @@ class ChallengeStreamWatcher(ContinuousWorker):
         if len(self.username_queue) > 0:
             username = self.username_queue.pop(0)
             logger.info(f"Sending a challenege request to user {username}")
-            response = self.api.create_challenge(username, settings.USER_CHALLENGE_PARAMS)
+            response = self.api.create_challenge(username, settings.CHALLENGE_PARAMS["real_time"])
             logger.info(f"Response from challenge request to {username}: {response}")
 
     def _do_automatic_matchmaking(self):

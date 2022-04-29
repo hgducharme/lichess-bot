@@ -5,9 +5,10 @@ from ContinuousWorker import ContinuousWorker
 logger = logging.getLogger(__name__)
 
 class ChessGame(ContinuousWorker):
-    def __init__(self, lichess_api, game_info, *args, **kwargs):
+    def __init__(self, lichess_api, engine, game_info, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.api = lichess_api
+        self.engine = engine
         self.info = game_info
         self.color = game_info["game"]["color"]
         self.game_id = self.info["game"]["fullId"]
@@ -28,15 +29,17 @@ class ChessGame(ContinuousWorker):
         if line_type == "gameFull":
             self.full_game_info = line
             self.game_state = line["state"]
-            pass
+            # self.engine.set_fen_position(self.full_game_info["game"]["fen"])
         elif line_type == "gameState":
             self.game_state = line
             our_turn = self.is_it_our_turn()
             if (our_turn):
-                # TODO:
-                # best_move = self.engine.get_move()
-                # self.api.move(best_move)
-                pass
+                logger.debug("It's our turn. Getting move from engine...")
+                moves = self.get_moves()
+                self.engine.set_position(moves)
+                best_move = self.engine.get_best_move(wtime = self.game_state["wtime"], btime = self.game_state["btime"])
+                logger.debug(f"Best move = {best_move}")
+                self.api.move(self.game_id, best_move)
 
     def is_it_our_turn(self):
         # If we're white and there is an even number recorded of moves, then it's our turn.

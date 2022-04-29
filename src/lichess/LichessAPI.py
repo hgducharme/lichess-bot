@@ -66,7 +66,10 @@ class LichessAPI():
     def move(self, gameId, move, offeringDraw = False):
         url = self._construct_url(URL_ENDPOINTS["make_a_bot_move"], gameId = gameId, move = move)
         query_parameters = { "offeringDraw": offeringDraw }
-        response = self.session.post(url, params = query_parameters)
+        
+        logger.debug(f"Sending move {move} to lichess.com")
+        response = self.session.post(url)
+        logger.debug(f"Lichess response: {response.json()}")
 
         return response
 

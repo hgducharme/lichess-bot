@@ -1,4 +1,6 @@
 import logging.config
+from stockfish import Stockfish
+
 from conf import settings
 from ChallengeStreamWatcher import ChallengeStreamWatcher
 from EventStreamWatcher import EventStreamWatcher
@@ -14,7 +16,8 @@ def main():
 
     # Initialize classes
     api = LichessAPI(settings.API_TOKEN)
-    game_manager = GameManager(api)
+    stockfish = Stockfish(path = settings.ENGINE["path"], parameters = settings.ENGINE["stockfish_parameters"])
+    game_manager = GameManager(api, stockfish)
     challenge_stream_watcher = ChallengeStreamWatcher(api, game_manager, name = "challenge_stream_watcher", daemon = True)
     event_stream_watcher = EventStreamWatcher(api, game_manager, name = "event_stream_watcher", daemon = True)
 

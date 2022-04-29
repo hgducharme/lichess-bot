@@ -4,14 +4,15 @@ from ChessGame import ChessGame
 logger = logging.getLogger(__name__)
 
 class GameManager:
-    def __init__(self, lichess_api):
+    def __init__(self, lichess_api, engine):
         logger.debug(f"Creating an instance of {self.__class__.__name__}")
         self.api = lichess_api
+        self.engine = engine
         self.games = {}
 
     def start_new_game(self, game_info):
         logger.debug(f"Starting a new game. Game info: {game_info}")
-        game = ChessGame(self.api, game_info)
+        game = ChessGame(self.api, self.engine, game_info)
         game_id = game_info["game"]["fullId"]
         self.games[game_id] = game
         game.start()

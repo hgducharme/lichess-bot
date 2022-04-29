@@ -1,23 +1,52 @@
 import os
 
-API_TOKEN = "xxxxxxxx"
+# These lines get the current settings file, and grabbing the next few directories above it back to the main directory
+# If this file changes location, these paths will be wrong
+PROJECT_BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+SRC_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ENGINE_DIR = os.path.join(SRC_DIR, "engines/")
+LICHESS_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+API_TOKEN = "xxxxxxx"
 MAX_NUMBER_OF_GAMES = 5
 AUTO_MATCHMAKING = False
-USER_CHALLENGE_PARAMS = {
-    "rated": "false",
-    "days": "1",
-    "color": "random",
-    "variant": "standard",
+CHALLENGE_PARAMS = {
+    "correspondance": {
+        "rated": "false",
+        "days": "1",
+        "color": "black",
+        "variant": "standard"
+    },
+    "real_time": {
+        "clock.limit": "60",
+        "clock.increment": "0",
+        "color": "random",
+        "variant": "standard"
+    }
+}
+ENGINE = {
+    "path": os.path.join(ENGINE_DIR, "Stockfish/src/stockfish"),
+    "stockfish_parameters": {
+        "Write Debug Log": "false",
+        "Contempt": 0,
+        "Min Split Depth": 0,
+        "Threads": 1,
+        "Ponder": "false",
+        "Hash": 16,
+        "MultiPV": 1,
+        "Skill Level": 20,
+        "Move Overhead": 30,
+        "Minimum Thinking Time": 20,
+        "Slow Mover": 80,
+        "UCI_Chess960": "false"
+    }
 }
 
 #################################
 # LOGGING
 #################################
 
-# This is getting this current settings file, and grabbing the next few directories above it back to the main directory
-# If this file changes location, this BASE_DIR will be wrong
-LICHESS_BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-LICHESS_LOG_DIR = os.path.join(LICHESS_BASE_DIR, "logs/")
+LICHESS_LOG_DIR = os.path.join(LICHESS_DIR, "logs/")
 
 LOGGING_CONFIG = { 
     "version": 1,
