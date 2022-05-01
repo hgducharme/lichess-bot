@@ -37,7 +37,7 @@ class EventStreamWatcher(ContinuousWorker):
                 # TODO: decline the game
                 pass
         elif event_type == "gameFinish":
-            self.game_manager.terminate_game(line["game"]["gameId"])
+            self.game_manager.terminate_game(line["game"]["fullId"])
         elif event_type == "challengeCancelled":
             pass
         else:

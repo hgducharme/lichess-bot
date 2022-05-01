@@ -52,6 +52,8 @@ class GameManager:
             game.stop()
             logger.debug(f"GameManager is blocking until game {game_id} thread has been killed...")
 
+        # TODO: This hangs
+        # https://stackoverflow.com/questions/47380442/joining-a-daemon-thread
         game.join()
         logger.info(f"Game {game_id} has ended.")
         

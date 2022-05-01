@@ -18,7 +18,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/src/lichess/main.py",
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": false
         }
     ]
 }

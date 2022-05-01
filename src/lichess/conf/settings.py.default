@@ -14,7 +14,7 @@ CHALLENGE_PARAMS = {
     "correspondance": {
         "rated": "false",
         "days": "1",
-        "color": "black",
+        "color": "random",
         "variant": "standard"
     },
     "real_time": {
