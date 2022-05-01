@@ -59,6 +59,8 @@ class ChessGame(ContinuousWorker):
 
     def _cleanup(self):
         # If the game is currently running, then abort or resign. Otherwise, do nothing
+        # TODO: This MIGHT be a race condition. If EventStreamWatcher tells us to terminate the game and we reach
+        # this before ChessGame gets a new state that says the game is finished, this might try to execute
         if self.game_state["status"] == "started":
             self._abort_or_resign()
 
@@ -78,5 +80,13 @@ class ChessGame(ContinuousWorker):
 
     def get_moves(self):
         # A "moves" string from the Lichess API will look like: "e2e4 c7c5 f2f4 d7d6 ..."
-        moves = tuple(self.game_state["moves"].strip().split(" "))
-        return moves
+        # The first move will be an empty string: ""
+        moves_string = self.game_state["moves"].strip()
+
+        # If the string is empty then there hasn't been any moves
+        # but if we .split() the string then we will get 1 entry into the moves tuple,
+        # so if the string is empty we need to return an empty tuple
+        if (moves_string == ""):
+                return tuple()
+        
+        return tuple(moves_string.split(" "))
