@@ -19,7 +19,7 @@ class GameManager:
             return False
 
         logger.info(f"Starting a new game. Game info: {game_info}")
-        game = ChessGame(self.api, self.engine, game_info)
+        game = ChessGame(self.api, self.engine, game_info, daemon = False)
         self.games[game_id] = game
         game.start()
 
@@ -35,6 +35,7 @@ class GameManager:
         return len(self.games)
 
     def terminate(self, wait = True):
+        self.stop_accepting_games()
         for game_id in list(self.games.keys()):
             self.terminate_game(game_id, wait)
 
@@ -47,13 +48,17 @@ class GameManager:
 
         if wait:
             logger.info(f"GameManager is waiting for game {game_id} to finish...")
+            game.join()
+
+            # TODO: We join to a game, waiting for it to finish, and when the event_stream_watcher
+            # class gets a game finish it also trys to terminate the game, it stops it, then we resume right here,
+            # and try to do everything again but the thread no longer exists, and we get an error when we 
+            # try to "del self.games[game_id]"
         else:
             logger.info(f"GameManager is attempting to terminate game {game_id}...")
             game.stop()
             logger.debug(f"GameManager is blocking until game {game_id} thread has been killed...")
 
-        # TODO: This hangs
-        # https://stackoverflow.com/questions/47380442/joining-a-daemon-thread
         game.join()
         logger.info(f"Game {game_id} has ended.")
         
