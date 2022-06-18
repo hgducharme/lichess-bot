@@ -62,12 +62,18 @@ class LichessCLI:
         
     def _quit(self):
         logger.info("Quitting the program.")
+        self._close_all_games()
+        self._close_all_threads()
+        self.is_running = False
+
+    def _close_all_games(self):
         if self.game_manager.do_games_exist():
             command = input(f"There are currently {self.game_manager.number_of_games()} game(s) being played. Do you want to terminate all games? (y/n): ")
 
             valid_commands = ("yes", "y", "no", "n")
             while (command.strip().lower() not in valid_commands):
                 command = input("(y/n): ")
+                command = command.strip().lower()
 
             if command == "y" or command == "yes":
                 print("Terminating all games...")
@@ -75,9 +81,6 @@ class LichessCLI:
             elif command == "n" or command == "no":
                 print("The program will end once all games have finished...")
                 self.game_manager.terminate(wait = True)
-
-        self._close_all_threads()
-        self.is_running = False
 
     def _close_all_threads(self):
         for thread in self.threads:
