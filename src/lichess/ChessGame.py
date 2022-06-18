@@ -15,10 +15,10 @@ class ChessGame(ContinuousWorker):
 
     def work(self):
         game_stream = self.api.stream_game_state(self.game_id)
-        for line in game_stream:
-            if line:
-                logger.debug(f"From game stream: {json.loads(line)}")
-                line = self._parse_byte(line)
+        for byte in game_stream:
+            if byte:
+                logger.debug(f"From game stream: {json.loads(byte)}")
+                line = self._parse_byte(byte)
                 self._store_game_state(line)
                 self._move()
 
