@@ -48,6 +48,9 @@ ENGINE = {
 
 LICHESS_LOG_DIR = os.path.join(LICHESS_DIR, "logs/")
 
+# Create the log directory if it doesn't exist
+os.makedirs(LICHESS_LOG_DIR, exist_ok = True)
+
 LOGGING_CONFIG = { 
     "version": 1,
     "disable_existing_loggers": True,
