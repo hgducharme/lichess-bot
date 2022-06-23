@@ -40,7 +40,26 @@ cd src/lichess/conf/
 cp settings.py.default settings.py
 ```
 
-Add your API token to `settings.py`. Either download stockfish from (the stockfish website)[https://stockfishchess.org/download/] or clone the (stockfish repo)[https://github.com/official-stockfish/Stockfish]. Regardless, rename the folder to `stockfish` and place it under `engines/` so that the structure looks like `chessAI/src/engines/stockfish/`. Update the path to the stockfish binary in `settings.py`. This path will probably be something like `stockfish/stockfish_XX_src/src/stockfish`.
+Add your API token to `settings.py`
+
+```
+API_TOKEN = "xxxxx"
+```
+
+Either download stockfish from (the stockfish website)[https://stockfishchess.org/download/] or clone the (stockfish repo)[https://github.com/official-stockfish/Stockfish], rename it to `stockfish`, and place it inside the `engines/` directory
+
+```
+mv /path/to/downloaded/stockfish/directory /path/to/chessAI/src/engines/stockfish
+```
+
+Update the path to the stockfish binary in `settings.py`. 
+
+```
+ENGINE= {
+ "path": os.path.join(ENGINE_DIR, "stockfish/stockfish_XX_src/src/stockfish")
+  ...
+}
+```
 
 Make sure everything works!
 
