@@ -52,7 +52,7 @@ Either download stockfish from [the stockfish website](https://stockfishchess.or
 mv /path/to/downloaded/stockfish/directory /path/to/chessAI/src/engines/stockfish
 ```
 
-Update the path to the stockfish binary in `settings.py`
+There is no need to keep the binary running in a separate terminal, the Python `Stockfish` library will handle that. Update the path to the stockfish binary in `settings.py` 
 
 ```
 ENGINE= {
