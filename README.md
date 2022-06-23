@@ -46,7 +46,7 @@ Add your API token to `settings.py`
 API_TOKEN = "xxxxx"
 ```
 
-Either download stockfish from (the stockfish website)[https://stockfishchess.org/download/] or clone the (stockfish repo)[https://github.com/official-stockfish/Stockfish], rename it to `stockfish`, and place it inside the `engines/` directory
+Either download stockfish from [the stockfish website](https://stockfishchess.org/download/) or clone the [stockfish repo](https://github.com/official-stockfish/Stockfish), rename it to `stockfish`, and place it inside the `engines/` directory
 
 ```
 mv /path/to/downloaded/stockfish/directory /path/to/chessAI/src/engines/stockfish
