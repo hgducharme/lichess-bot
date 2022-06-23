@@ -25,7 +25,7 @@ CHALLENGE_PARAMS = {
     }
 }
 ENGINE = {
-    "path": os.path.join(ENGINE_DIR, "Stockfish/src/stockfish"),
+    "path": os.path.join(ENGINE_DIR, "stockfish/src/stockfish"),
     "stockfish_parameters": {
         "Write Debug Log": "false",
         "Contempt": 0,
