@@ -52,7 +52,7 @@ Either download stockfish from [the stockfish website](https://stockfishchess.or
 mv /path/to/downloaded/stockfish/directory /path/to/chessAI/src/engines/stockfish
 ```
 
-Update the path to the stockfish binary in `settings.py`. 
+Update the path to the stockfish binary in `settings.py`
 
 ```
 ENGINE= {
