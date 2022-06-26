@@ -34,7 +34,7 @@ class GameManager:
     def number_of_games(self):
         return len(self.games)
 
-    def terminate(self, wait = True):
+    def terminate_all_games(self, wait = True):
         self.stop_accepting_games()
         for game_id in list(self.games.keys()):
             self.terminate_game(game_id, wait)
@@ -48,8 +48,8 @@ class GameManager:
 
         if wait:
             logger.info(f"GameManager is waiting for game {game_id} to finish...")
-            game.join()
 
+            # game.join()
             # TODO: We join to a game, waiting for it to finish, and when the event_stream_watcher
             # class gets a game finish it also trys to terminate the game, it stops it, then we resume right here,
             # and try to do everything again but the thread no longer exists, and we get an error when we 
@@ -58,11 +58,10 @@ class GameManager:
             logger.info(f"GameManager is attempting to terminate game {game_id}...")
             game.stop()
             logger.debug(f"GameManager is blocking until game {game_id} thread has been killed...")
-
-        game.join()
-        logger.info(f"Game {game_id} has ended.")
-        
-        del self.games[game_id]
+            game.join()
+            logger.info(f"Game {game_id} has ended.")
+            
+            del self.games[game_id]
 
     def stop_accepting_games(self):
         self.accepting_games = False

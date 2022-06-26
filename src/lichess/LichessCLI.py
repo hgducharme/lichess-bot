@@ -61,26 +61,40 @@ class LichessCLI:
         self.challenge_stream_watcher.challenge_user(username)
         
     def _quit(self):
-        logger.info("Quitting the program.")
-        self._close_all_games()
-        self._close_all_threads()
-        self.is_running = False
+        continue_to_quit = self._confirm_quit_command()
+        if continue_to_quit:
+            logger.info("Quitting the program.")
+            self._close_all_games()
+            self._close_all_threads()
+            self.is_running = False
+
+    def _confirm_quit_command():
+        command = input("Are you sure you want to quit? ((Y)es, (N)o): ")
+        valid_commands = ("yes", "y", "no", "n")
+        while (command.stripo.lower() not in valid_commands):
+            command = input("((Y)es, (N)o)): ")
+            command = command.strip().lower()
+
+        if command == "y" or command == "yes":
+            return True
+        else:
+            return False
 
     def _close_all_games(self):
         if self.game_manager.do_games_exist():
-            command = input(f"There are currently {self.game_manager.number_of_games()} game(s) being played. Do you want to terminate all games? (y/n): ")
+            command = input(f"There are currently {self.game_manager.number_of_games()} game(s) being played. Do you want to terminate all games? [(Y)es, (N)o, (B)ack]: ")
 
             valid_commands = ("yes", "y", "no", "n")
             while (command.strip().lower() not in valid_commands):
-                command = input("(y/n): ")
+                command = input("((Y)es, (N)o): ")
                 command = command.strip().lower()
 
             if command == "y" or command == "yes":
                 print("Terminating all games...")
-                self.game_manager.terminate(wait = False)
+                self.game_manager.terminate_all_games(wait = False)
             elif command == "n" or command == "no":
                 print("The program will end once all games have finished...")
-                self.game_manager.terminate(wait = True)
+                # self.game_manager.terminate_all_games(wait = True)
 
     def _close_all_threads(self):
         for thread in self.threads:
