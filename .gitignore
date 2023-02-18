@@ -4,7 +4,8 @@ lichessEnv/
 config.json
 settings.py
 *.log*
-stockfish/
+Stockfish*/
+stockfish*/
 
 # Prerequisites
 *.d
