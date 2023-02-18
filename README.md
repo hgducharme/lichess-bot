@@ -27,7 +27,7 @@ cd chessAI/
 Create and install the python environment
 
 ```
-cd src/lichess/
+cd /path/to/chessAI/
 python3 -m venv env
 source env/bin/activate
 pip3 install -r requirements.txt
@@ -49,14 +49,14 @@ API_TOKEN = "xxxxx"
 Either download stockfish from [the stockfish website](https://stockfishchess.org/download/) or clone the [stockfish repo](https://github.com/official-stockfish/Stockfish), rename it to `stockfish`, and place it inside the `engines/` directory
 
 ```
-mv /path/to/downloaded/stockfish/directory /path/to/chessAI/src/engines/stockfish
+mv /path/to/downloaded/Stockfish/directory /path/to/chessAI/src/engines/Stockfish
 ```
 
 There is no need to keep the binary running in a separate terminal, the Python `Stockfish` library will handle that. Update the path to the stockfish binary in `settings.py` 
 
 ```
 ENGINE= {
- "path": os.path.join(ENGINE_DIR, "stockfish/stockfish_XX_src/src/stockfish")
+ "path": os.path.join(ENGINE_DIR, "Stockfish/src/stockfish")
   ...
 }
 ```
