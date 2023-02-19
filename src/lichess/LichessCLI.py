@@ -68,10 +68,10 @@ class LichessCLI:
             self._close_all_threads()
             self.is_running = False
 
-    def _confirm_quit_command():
+    def _confirm_quit_command(self):
         command = input("Are you sure you want to quit? ((Y)es, (N)o): ")
         valid_commands = ("yes", "y", "no", "n")
-        while (command.stripo.lower() not in valid_commands):
+        while (command.strip().lower() not in valid_commands):
             command = input("((Y)es, (N)o)): ")
             command = command.strip().lower()
 
@@ -100,5 +100,6 @@ class LichessCLI:
         for thread in self.threads:
             thread.stop()
         
+        # TODO: This hangs
         for thread in self.threads:
             thread.join()
