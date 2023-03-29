@@ -33,7 +33,6 @@ class LichessAPI():
         return response
 
     def _construct_url(self, endpoint_url, **kwargs):
-
         for parameter_name, value in kwargs.items():
             endpoint_url = self._add_url_parameter(endpoint_url, parameter_name, str(value))
 
@@ -56,10 +55,9 @@ class LichessAPI():
 
         try:
             title = profile["title"]
+            is_bot = title == "BOT"
         except KeyError as err:
             is_bot = False
-
-        is_bot = title == "BOT"
 
         return is_bot
 
