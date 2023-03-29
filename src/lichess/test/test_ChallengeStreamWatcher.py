@@ -1,28 +1,37 @@
 import pytest
+import requests
 
 from src.lichess.GameManager import GameManager
 from src.lichess.LichessAPI import LichessAPI
 from src.lichess.ChallengeStreamWatcher import ChallengeStreamWatcher
 
-class TestChallengeStreamWatcher:
+@pytest.fixture
+def mock_session(mocker):
+    mock_session = mocker.patch.object(requests, 'Session', autospec=True)
+    mock_session.return_value.__enter__.return_value = mock_session
+    return mock_session
 
-    def setup_method(self):
-        # We need to mock requests.session.get and requests.session.post
-        
-        # self.api = LichessAPI()
-        self.game_manager = GameManager()
-        self.challenge_stream_watcher = ChallengeStreamWatcher()
+class EngineMock:
+    def __init__(self):
+        pass
+
+
+class TestChallengeStreamWatcher:
+    
+    mock_oath_token = "aaa"
+
+    @pytest.mark.usefixtures('mock_session')
+    def setup_method(self):   
+        self.api = LichessAPI(TestChallengeStreamWatcher.mock_oath_token)
+        self.engine_mock = EngineMock()
+        self.game_manager = GameManager(self.api, self.engine_mock)
+        self.challenge_stream_watcher = ChallengeStreamWatcher(self.api, self.game_manager)
 
     def teardown_method(self):
        pass
 
-    # def setup_class(self):
-    #     # Be careful with this. The init function is going to make calls to request.
-    #     # Figure out a way to mock this in the instantiation
-    #     # self.api = LichessAPI()
-    #     # self.game_manager = GameManager()
-    #     # self.challenge_stream_watcher = ChallengeStreamWatcher()
-    #     pass
-
     def test_maxGameLimit(self):
+        # TODO: Call GameManager.start_new_game() for n times, where n is the max nubmer of games + 1,
+        # and see if GameManager will reject new games once it hits its limit. We should probably setup
+        # a settings file for testing, maybe we can just use the default one? Or one derived from the default one.
         assert False
