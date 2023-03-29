@@ -1,4 +1,5 @@
 import pytest
+
 from GameManager import GameManager
 from LichessAPI import LichessAPI
 from ChallengeStreamWatcher import ChallengeStreamWatcher
@@ -12,4 +13,4 @@ class TestChallengeStreamWatcher:
         self.challenge_stream_watcher = ChallengeStreamWatcher()
 
     def test_maxGameLimit(self):
-        return False
+        assert False

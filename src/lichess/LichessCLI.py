@@ -82,7 +82,7 @@ class LichessCLI:
 
     def _close_all_games(self):
         if self.game_manager.do_games_exist():
-            command = input(f"There are currently {self.game_manager.number_of_games()} game(s) being played. Do you want to terminate all games? [(Y)es, (N)o, (B)ack]: ")
+            command = input(f"There are currently {self.game_manager.number_of_games()} game(s) being played. Do you want to terminate all games? [(Y)es, (N)o]: ")
 
             valid_commands = ("yes", "y", "no", "n")
             while (command.strip().lower() not in valid_commands):
@@ -100,6 +100,5 @@ class LichessCLI:
         for thread in self.threads:
             thread.stop()
         
-        # TODO: This hangs
         for thread in self.threads:
             thread.join()

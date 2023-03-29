@@ -34,7 +34,7 @@ class EventStreamWatcher(ContinuousWorker):
             logger.info("Starting a new game.")
             game_started = self.game_manager.start_new_game(line)
             if (not game_started):
-                # TODO: decline the game
+                # TODO: decline/abort the game
                 pass
         elif event_type == "gameFinish":
             self.game_manager.terminate_game(line["game"]["fullId"])
