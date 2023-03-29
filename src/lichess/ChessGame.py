@@ -1,6 +1,6 @@
 import json
 import logging
-from ContinuousWorker import ContinuousWorker
+from src.lichess.ContinuousWorker import ContinuousWorker
 
 logger = logging.getLogger(__name__)
 

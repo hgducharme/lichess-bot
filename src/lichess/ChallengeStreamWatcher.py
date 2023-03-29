@@ -1,7 +1,7 @@
 import json
 import logging
-from conf import settings
-from ContinuousWorker import ContinuousWorker
+from src.lichess.conf import settings
+from src.lichess.ContinuousWorker import ContinuousWorker
 
 logger = logging.getLogger(__name__)
 
