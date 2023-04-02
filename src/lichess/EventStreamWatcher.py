@@ -26,7 +26,8 @@ class EventStreamWatcher(ContinuousWorker):
     def _dispatch_event_action(self, line):
         event_type = line["type"]
         if event_type == "challenge":
-            # The ChallengeHandler class handles all incoming and outgoing challenges, so we will skip this event type
+            # The ChallengeHandler class handles all incoming and outgoing challenges, so we will skip this event type.
+            # The reason for this is because the Lichess API has two different streams for "Events" and "Challenges"
             pass
         elif event_type == "challengeDeclined":
             pass
