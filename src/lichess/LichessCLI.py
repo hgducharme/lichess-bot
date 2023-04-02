@@ -101,4 +101,9 @@ class LichessCLI:
             thread.stop()
         
         for thread in self.threads:
-            thread.join()
+            thread.join(10)
+
+            if (thread.is_alive()):
+                logger.debug(f"{thread} is still alive after 10 seconds")
+            else:
+                logger.debug(f"{thread} has terminated")
