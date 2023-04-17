@@ -7,7 +7,7 @@ from src.lichess.ChallengeStreamWatcher import ChallengeStreamWatcher
 from src.lichess.conf import settings
 
 @pytest.fixture
-def mock_session(mocker):
+def mock_requests_session(mocker):
     mock_session = mocker.patch.object(requests, 'Session', autospec=True)
     mock_session.return_value.__enter__.return_value = mock_session
     return mock_session
@@ -18,15 +18,19 @@ class EngineMock:
 
 class TestChallengeStreamWatcher:
     
-    mock_oath_token = "aaa"
+    mock_oath_token = "mock_oauth_token"
 
     @pytest.mark.usefixtures('mock_session')
-    def setup_method(self):   
+    def setup_method(self):
+        # Instantiate required instances for ChallengeStreamWatcher class
         self.api = LichessAPI(TestChallengeStreamWatcher.mock_oath_token)
         self.engine_mock = EngineMock()
         self.game_manager = GameManager(self.api, self.engine_mock)
+
+        # Create the ChallengeStreamWatcher class
         self.challenge_stream_watcher = ChallengeStreamWatcher(self.api, self.game_manager)
 
+        # Sample challenge data as how we see it from the lichess.com api
         self.mock_challenges = [
             {'type': 'challenge', 'challenge': {'id': 'A', 'url': 'https://lichess.org/A', 'status': 'created', 'challenger': {'id': 'stockai', 'name': 'stockAI', 'title': 'BOT', 'rating': 2000, 'provisional': True, 'online': True}, 'destUser': {'id': 'hgducharme', 'name': 'hgducharme', 'title': None, 'rating': 893, 'online': True}, 'variant': {'key': 'standard', 'name': 'Standard', 'short': 'Std'}, 'rated': False, 'speed': 'bullet', 'timeControl': {'type': 'clock', 'limit': 60, 'increment': 0, 'show': '1+0'}, 'color': 'random', 'finalColor': 'black', 'perf': {'icon': '\ue047', 'name': 'Bullet'}}, 'compat': {'bot': True, 'board': False}},
             {'type': 'challenge', 'challenge': {'id': 'B', 'url': 'https://lichess.org/B', 'status': 'created', 'challenger': {'id': 'stockai', 'name': 'stockAI', 'title': 'BOT', 'rating': 2000, 'provisional': True, 'online': True}, 'destUser': {'id': 'hgducharme', 'name': 'hgducharme', 'title': None, 'rating': 893, 'online': True}, 'variant': {'key': 'standard', 'name': 'Standard', 'short': 'Std'}, 'rated': False, 'speed': 'bullet', 'timeControl': {'type': 'clock', 'limit': 60, 'increment': 0, 'show': '1+0'}, 'color': 'random', 'finalColor': 'black', 'perf': {'icon': '\ue047', 'name': 'Bullet'}}, 'compat': {'bot': True, 'board': False}},
@@ -39,17 +43,18 @@ class TestChallengeStreamWatcher:
     def teardown_method(self):
        pass
 
-    def test_maxGameLimit(self):
-        # TODO: Call GameManager.start_new_game() n times, where n is the max nubmer of games.
-        # and see if ChallengeStreamWatcher will reject new games once it hits its limit. We should probably setup
-        # a settings file for testing, maybe we can just use the default one? Or one derived from the default one.
+    def test_challengeUserGetsAddedToChallengeQueue(self):
+        test_user = "testuser"
+        self.challenge_stream_watcher.challenge_user(test_user)
+        assert test_user in self.challenge_stream_watcher.username_queue
 
-        # Create the max number of games allowed
-        for i in range(0, settings.MAX_NUMBER_OF_GAMES):
-            self.game_manager.start_new_game(self.mock_challenges[i])
+    def test_challengingEmptyUserDoesNothing(self):
+        self.challenge_stream_watcher.challenge_user()
+        assert len(self.challenge_stream_watcher.username_queue) == 0
 
-        # Send a mock challenge to ChallengeStreamWatcher and verify that it doesn't create a new game
-        # OR, should I instead setup the test suite just like how main.py sets it up, and then interface
-        # with the code through the event and challenge streams? Instead of interacting on a more surgical level.
+    def test_acceptingAChallenge(self):
+        
+        pass
 
-        assert False
+    def test_sendingABotChallenge(self):
+        pass
