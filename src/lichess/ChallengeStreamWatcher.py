@@ -17,27 +17,25 @@ class ChallengeStreamWatcher(ContinuousWorker):
         if self.game_manager.number_of_games() == settings.MAX_NUMBER_OF_GAMES:
             return
 
-        self._send_user_challenge()
-        self._do_automatic_matchmaking()
+        if len(self.username_queue) > 0:
+            self._send_user_challenge()
+
+        if settings.AUTO_MATCHMAKING == True:
+            self._read_in_challenges()
+            self._accept_and_send_challenges()
 
     def challenge_user(self, username = None):
         self.username_queue.append(username)
 
-    def _send_user_challenge(self):
-        if len(self.username_queue) > 0:
-            username = self.username_queue.pop(0)
-            logger.info(f"Sending a challenege request to user {username}")
-            response = self.api.create_challenge(username, settings.CHALLENGE_PARAMS["real_time"])
-            logger.info(f"Response from challenge request to {username}: {response}")
+    def _send_user_challenge(self):   
+        username = self.username_queue.pop(0)
+        logger.info(f"Sending a challenege request to user {username}")
+        response = self.api.create_challenge(username, settings.CHALLENGE_PARAMS["real_time"])
+        logger.info(f"Response from challenge request to {username}: {response}")
 
-    def _do_automatic_matchmaking(self):
-        if settings.AUTO_MATCHMAKING == True:
-            challenges_stream = self.api.stream_challenges()
-            self.challenges = self._parse_stream(challenges_stream)
-            if self._challenges_exist():
-                self._accept_challenge()
-            else:
-                self._send_bot_challenge()
+    def _read_in_challenges(self):
+        challenges_stream = self.api.stream_challenges()
+        self.challenges = self._parse_stream(challenges_stream)
 
     def _parse_stream(self, stream):
         items_in_stream = []
@@ -50,6 +48,12 @@ class ChallengeStreamWatcher(ContinuousWorker):
             return items_in_stream[0]
 
         return tuple(items_in_stream)
+    
+    def _accept_and_send_challenges(self):
+        if self._challenges_exist():
+            self._accept_challenge()
+        else:
+            self._send_bot_challenge()
 
     def _challenges_exist(self):
         incoming_challenges = self.challenges["in"]
