@@ -1,10 +1,12 @@
 import logging
 
+from src.lichess.conf import settings
+
 logger = logging.getLogger(__name__)
 
 # TODO: Maybe make this an enum?
 MENU_OPTIONS = {
-    1: "Automatic matchmaking",
+    1: f"Toggle automatic matchmaking",
     2: "Challenge the AI",
     3: "Challenge a user",
     4: "Help",
@@ -22,13 +24,13 @@ class LichessCLI:
 
     def run(self):
         print("Welcome to the Lichess CLI tool. Please select one of the commands below: ")
-        self._print_menu()
 
         while self.is_running:
+            self._print_menu()
             command = int(input("Enter your choice: "))
 
             if (command == 1):
-                self._matchmaking()
+                self._toggle_automatic_matchmaking()
             elif (command == 2):
                 self._challenge_ai()
             elif (command == 3):
@@ -47,12 +49,13 @@ class LichessCLI:
                 print("Sorry, I don't understand that command. Please try again.")
 
     def _print_menu(self):
+        print("")
         for key in MENU_OPTIONS.keys():
             print(f"{key}. -- {MENU_OPTIONS[key]}")
 
-    def _matchmaking(self):
-        # TODO: Turn on or off matchmaking
-        return 0
+    def _toggle_automatic_matchmaking(self):
+        settings.AUTO_MATCHMAKING = not settings.AUTO_MATCHMAKING
+        print(f"Automatic matchmaking set to: {settings.AUTO_MATCHMAKING}")
 
     def _challenge_ai(self):
         return 0
