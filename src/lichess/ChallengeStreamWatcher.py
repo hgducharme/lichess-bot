@@ -25,7 +25,10 @@ class ChallengeStreamWatcher(ContinuousWorker):
             self._accept_and_send_challenges()
 
     def challenge_user(self, username = None):
-        self.username_queue.append(username)
+        if (username is not None):
+            self.username_queue.append(username)
+        else:
+            logger.debug(f"No username was passed into challenge_user, skipping challenge request")
 
     def _send_user_challenge(self):   
         username = self.username_queue.pop(0)
@@ -50,12 +53,12 @@ class ChallengeStreamWatcher(ContinuousWorker):
         return tuple(items_in_stream)
     
     def _accept_and_send_challenges(self):
-        if self._challenges_exist():
+        if self.challenges_exist():
             self._accept_challenge()
         else:
             self._send_bot_challenge()
 
-    def _challenges_exist(self):
+    def challenges_exist(self):
         incoming_challenges = self.challenges["in"]
         return (len(incoming_challenges) > 0)
 
