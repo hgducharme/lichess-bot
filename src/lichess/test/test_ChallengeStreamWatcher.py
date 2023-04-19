@@ -53,7 +53,6 @@ class TestChallengeStreamWatcher:
         assert len(self.challenge_stream_watcher.username_queue) == 0
 
     def test_acceptingAChallenge(self):
-        
         pass
 
     def test_sendingABotChallenge(self):
