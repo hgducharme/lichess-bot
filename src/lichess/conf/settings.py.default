@@ -114,20 +114,12 @@ LOGGING_CONFIG = {
             "propagate": False
         },
         "ChallengeStreamWatcher": {
-            "handlers": [
-                "console",
-                "error_file",
-                "lichess",
-            ],
+            "handlers": [ "console", "error_file", "lichess" ],
             "level": "DEBUG",
             "propagate": False,
         },
         "EventStreamWatcher": {
-            "handlers": [
-                "console",
-                "error_file",
-                "lichess",
-            ],
+            "handlers": [ "console", "error_file", "lichess" ],
             "level": "DEBUG",
             "propagate": False,
         },
