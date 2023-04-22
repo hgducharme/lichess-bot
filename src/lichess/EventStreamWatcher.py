@@ -17,11 +17,8 @@ class EventStreamWatcher(ContinuousWorker):
         for line in event_stream:
             if line:
                 logger.debug(f"From event stream: {json.loads(line)}")
-                line = self._parse_byte(line)
+                line = json.loads(line)
                 self._dispatch_event_action(line)
-
-    def _parse_byte(self, byte):
-        return json.loads(str(byte, "utf-8"))
     
     def _dispatch_event_action(self, line):
         event_type = line["type"]
