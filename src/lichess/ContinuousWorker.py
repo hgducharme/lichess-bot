@@ -14,7 +14,6 @@ class ContinuousWorker(threading.Thread):
 
     def run(self):
         logger.debug(f"A {self.__class__.__name__} thread has been started")
-        # TODO: I think after calling stop() this doesn't get hit again maybe?
         while not self.terminate_flag.is_set():
             self.work()
 
