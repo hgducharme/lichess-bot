@@ -16,10 +16,10 @@ class EventStreamWatcher(ContinuousWorker):
 
     def work(self):
         # Using next(self.event_stream) may end up being a bottle-neck on speed, idk how fast it is,
-        # but right now it's the only way to not have an infinite loop inside this function
-        # for line in event_stream causes an infinite loop because the event_stream never closes
+        # but right now it's the only way to not have an infinite loop inside this function.
+        # `for line in event_stream` causes an infinite loop because the event_stream never closes
         line = next(self.event_stream)
-        
+
         if line:
             line = json.loads(line)
             logger.debug(f"From event stream: {line}")
