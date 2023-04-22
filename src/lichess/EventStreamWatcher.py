@@ -11,14 +11,19 @@ class EventStreamWatcher(ContinuousWorker):
         self.game_manager = game_manager
         self.username = self.api.get_profile().json()["username"]
 
-    def work(self):
-        event_stream = self.api.stream_events()
+        # Initialize event stream upon instantiation of this class
+        self.event_stream = self.api.stream_events()
 
-        for line in event_stream:
-            if line:
-                logger.debug(f"From event stream: {json.loads(line)}")
-                line = json.loads(line)
-                self._dispatch_event_action(line)
+    def work(self):
+        # Using next(self.event_stream) may end up being a bottle-neck on speed, idk how fast it is,
+        # but right now it's the only way to not have an infinite loop inside this function
+        # for line in event_stream causes an infinite loop because the event_stream never closes
+        line = next(self.event_stream)
+        
+        if line:
+            line = json.loads(line)
+            logger.debug(f"From event stream: {line}")
+            self._dispatch_event_action(line)
     
     def _dispatch_event_action(self, line):
         event_type = line["type"]
