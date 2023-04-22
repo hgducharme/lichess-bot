@@ -12,6 +12,9 @@ class ChallengeStreamWatcher(ContinuousWorker):
         self.api = lichess_api
         self.game_manager = game_manager
         self.username_queue = []
+        
+        # Initialize challenge stream upon instantiation of this class
+        self.challenges_stream = self.api.stream_challenges()
 
     def work(self):
         if self.game_manager.number_of_games() == settings.MAX_NUMBER_OF_GAMES:
@@ -21,7 +24,7 @@ class ChallengeStreamWatcher(ContinuousWorker):
             self._send_user_challenge()
 
         if settings.AUTO_MATCHMAKING == True:
-            self._read_in_challenges()
+            challenges = self._parse_stream(self.challenges_stream)
             self._accept_and_send_challenges()
 
     def challenge_user(self, username = None):
@@ -35,10 +38,6 @@ class ChallengeStreamWatcher(ContinuousWorker):
         logger.info(f"Sending a challenege request to user {username}")
         response = self.api.create_challenge(username, settings.CHALLENGE_PARAMS["real_time"])
         logger.info(f"Response from challenge request to {username}: {response}")
-
-    def _read_in_challenges(self):
-        challenges_stream = self.api.stream_challenges()
-        self.challenges = self._parse_stream(challenges_stream)
 
     def _parse_stream(self, stream):
         items_in_stream = []
