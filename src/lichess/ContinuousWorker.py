@@ -13,9 +13,12 @@ class ContinuousWorker(threading.Thread):
         self.terminate_flag = threading.Event()
 
     def run(self):
-        logger.debug(f"A {self.__class__.__name__} thread has been started")
+        logger.debug(f"{self.__class__.__name__} thread has been started")
+
         while not self.terminate_flag.is_set():
             self.work()
+
+        logger.debug(f"{self.__class__.__name__} has terminated")
 
     @abstractmethod
     def work(self):
