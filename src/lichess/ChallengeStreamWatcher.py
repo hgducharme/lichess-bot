@@ -7,7 +7,6 @@ logger = logging.getLogger(__name__)
 
 class ChallengeStreamWatcher(ContinuousWorker):
     def __init__(self, lichess_api, game_manager, *args, **kwargs):
-        logger.debug(logger.name)
         super().__init__(*args, **kwargs)
         self.api = lichess_api
         self.game_manager = game_manager
