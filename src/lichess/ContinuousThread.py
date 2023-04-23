@@ -4,7 +4,7 @@ from abc import ABCMeta, abstractmethod
 
 logger = logging.getLogger(__name__)
 
-class ContinuousWorker(threading.Thread):
+class ContinuousThread(threading.Thread):
     __metaclass__ = ABCMeta
 
     def __init__(self, *args, **kwargs):
