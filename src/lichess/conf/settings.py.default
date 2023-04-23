@@ -123,7 +123,7 @@ LOGGING_CONFIG = {
             "level": "DEBUG",
             "propagate": False,
         },
-        "src.lichess.ContinuousWorker": {
+        "src.lichess.ContinuousThread": {
             "handlers": ["console", "error_file", "lichess"],
             "level": "DEBUG",
             "propagate": False

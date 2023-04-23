@@ -1,10 +1,10 @@
 import json
 import logging
-from src.lichess.ContinuousWorker import ContinuousWorker
+from src.lichess.ContinuousThread import ContinuousThread
 
 logger = logging.getLogger(__name__)
 
-class ChessGame(ContinuousWorker):
+class ChessGame(ContinuousThread):
     def __init__(self, lichess_api, engine, game_info, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.api = lichess_api
