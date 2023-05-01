@@ -1,17 +1,13 @@
-import pytest
-
 from src.lichess.GameManager import GameManager
 from src.lichess.LichessAPI import LichessAPI
 from src.lichess.ChallengeStreamWatcher import ChallengeStreamWatcher
 from src.lichess.test.conftest import *
 
 class TestChallengeStreamWatcher:
-    @pytest.mark.usefixtures('mock_session')
-    def setup_method(self, mock_oauth_token):
+    def setup_method(self):
         # Setup dependencies
-        self.api = LichessAPI(mock_oauth_token)
-        self.engine_mock = EngineStub()
-        self.game_manager = GameManager(self.api, self.engine_mock)
+        self.api = LichessAPI(mock_requests_session)
+        self.game_manager = GameManager(self.api, engine_stub)
 
         # Instantiate the class to test
         self.challenge_stream_watcher = ChallengeStreamWatcher(self.api, self.game_manager)

@@ -1,9 +1,6 @@
 import pytest
 import requests
 
-# TODO: This is probably how we mock our Session() object:
-# https://docs.pytest.org/en/latest/how-to/monkeypatch.html#monkeypatching-returned-objects-building-mock-classes
-
 # @pytest.fixture
 # def disable_network_calls(monkeypatch):
 #     def stunted_get():
@@ -16,18 +13,29 @@ def disable_network_calls(monkeypatch):
     """Remove requests.sessions.Session.request for all tests."""
     monkeypatch.delattr("requests.sessions.Session.request")
 
-def mock_requests_session(mocker):
-    mock_session = mocker.patch.object(requests, 'Session', autospec=True)
-    mock_session.return_value.__enter__.return_value = mock_session
-    return mock_session
-
-@pytest.fixture
-def mock_oauth_token():
-    return "mock_oauth_token"
+# TODO: This is probably how we mock our Session() object:
+# https://docs.pytest.org/en/latest/how-to/monkeypatch.html#monkeypatching-returned-objects-building-mock-classes
+# Figure out a new way to mock requests.Session() objects
+# def mock_requests_session(mocker):
+#     mock_session = mocker.patch.object(requests, 'Session', autospec=True)
+#     mock_session.return_value.__enter__.return_value = mock_session
+#     return mock_session
 
 class EngineStub:
     def __init__(self):
         pass
+
+@pytest.fixture
+def engine_stub():
+    return EngineStub()
+
+class MockSession:
+    def __init__(self):
+        pass
+
+@pytest.fixture
+def mock_requests_session():
+    return MockSession()
 
 # Sample challenge data as how we see it from the lichess api
 mock_challenges = [

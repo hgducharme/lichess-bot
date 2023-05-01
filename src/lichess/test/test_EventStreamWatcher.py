@@ -1,18 +1,13 @@
-import pytest
-import requests
-
 from src.lichess.GameManager import GameManager
 from src.lichess.LichessAPI import LichessAPI
 from src.lichess.EventStreamWatcher import EventStreamWatcher
 from src.lichess.test.conftest import *
 
 class TestEventStreamWatcher:
-    @pytest.mark.usefixtures('mock_session')
-    def setup_method(self, mock_oauth_token):
+    def setup_method(self):
         # Setup dependencies
-        self.api = LichessAPI(mock_oauth_token)
-        self.engine_mock = EngineStub()
-        self.game_manager = GameManager(self.api, self.engine_mock)
+        self.api = LichessAPI(mock_requests_session)
+        self.game_manager = GameManager(self.api, engine_stub)
 
         # Instantiate the class to test
         # TODO: Mock the self.username call inside the EventStreamWatcher constructor
