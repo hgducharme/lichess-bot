@@ -1,5 +1,4 @@
 import re
-import requests
 import logging
 
 logger = logging.getLogger(__name__)
@@ -22,9 +21,8 @@ URL_ENDPOINTS = {
 }
 
 class LichessAPI():
-    def __init__(self, oauth_token):
-        self.session = requests.Session()
-        self.session.headers.update({"Authorization": f"Bearer {oauth_token}"})
+    def __init__(self, api_session):
+        self.session = api_session
 
     def get_profile(self):
         url = self._construct_url(URL_ENDPOINTS["get_my_profile"])
