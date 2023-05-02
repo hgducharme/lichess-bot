@@ -6,11 +6,11 @@ from src.lichess.test.conftest import *
 class TestChallengeStreamWatcher:
     def setup_method(self):
         # Setup dependencies
-        self.api = LichessAPI(mock_requests_session)
-        self.game_manager = GameManager(self.api, engine_stub)
+        api = LichessAPI(mock_requests_session)
+        game_manager = GameManager(api, engine_stub)
 
         # Instantiate the class to test
-        self.challenge_stream_watcher = ChallengeStreamWatcher(self.api, self.game_manager)
+        self.challenge_stream_watcher = ChallengeStreamWatcher(api, game_manager)
 
     def teardown_method(self):
        pass

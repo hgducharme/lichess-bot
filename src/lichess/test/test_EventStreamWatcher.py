@@ -6,12 +6,11 @@ from src.lichess.test.conftest import *
 class TestEventStreamWatcher:
     def setup_method(self):
         # Setup dependencies
-        self.api = LichessAPI(mock_requests_session)
-        self.game_manager = GameManager(self.api, engine_stub)
+        api = LichessAPI(mock_requests_session)
+        game_manager = GameManager(api, engine_stub)
 
         # Instantiate the class to test
-        # TODO: Mock the self.username call inside the EventStreamWatcher constructor
-        self.event_stream_watcher = EventStreamWatcher(self.api, self.game_manager)
+        self.event_stream_watcher = EventStreamWatcher(api, game_manager)
 
     def teardown_method(self):
        pass
