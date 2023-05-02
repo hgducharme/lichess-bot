@@ -1,17 +1,12 @@
 import pytest
 import requests
 
-# @pytest.fixture
-# def disable_network_calls(monkeypatch):
-#     def stunted_get():
-#         raise RuntimeError("Network access not allowed during testing!")
-#     monkeypatch.setattr(requests, "get", lambda *args, **kwargs: stunted_get())
-
-# TODO: Figure out how to raise a runtime error in this function similar to the above function.
 @pytest.fixture(autouse=True)
 def disable_network_calls(monkeypatch):
-    """Remove requests.sessions.Session.request for all tests."""
-    monkeypatch.delattr("requests.sessions.Session.request")
+    """Disable all calls to requests.sessions.Session.request for all tests."""
+    def disabled_request():
+        raise RuntimeError("HTTP requests not allowed during testing!")
+    monkeypatch.setattr(requests.sessions.Session, "request", lambda *args, **kwargs: disabled_request())
 
 # TODO: This is probably how we mock our Session() object:
 # https://docs.pytest.org/en/latest/how-to/monkeypatch.html#monkeypatching-returned-objects-building-mock-classes
