@@ -1,10 +1,10 @@
 from responses import _recorder
 
-from src.lichess.GameManager import GameManager
-from src.lichess.LichessAPI import LichessAPI
-from src.lichess.EventStreamWatcher import EventStreamWatcher
-from src.lichess.test.conftest import *
-from src.lichess.conf import settings
+from lichess.GameManager import GameManager
+from lichess.LichessAPI import LichessAPI
+from lichess.EventStreamWatcher import EventStreamWatcher
+from lichess.test.conftest import *
+from lichess.conf import settings
 
 @pytest.fixture(scope="module")
 @responses.activate
