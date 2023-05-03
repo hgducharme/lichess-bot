@@ -2,12 +2,12 @@ import logging.config
 import requests
 from stockfish import Stockfish
 
-from src.lichess.conf import settings
-from src.lichess.ChallengeStreamWatcher import ChallengeStreamWatcher
-from src.lichess.EventStreamWatcher import EventStreamWatcher
-from src.lichess.GameManager import GameManager
-from src.lichess.LichessAPI import LichessAPI
-from src.lichess.LichessCLI import LichessCLI
+from lichess.conf import settings
+from lichess.ChallengeStreamWatcher import ChallengeStreamWatcher
+from lichess.EventStreamWatcher import EventStreamWatcher
+from lichess.GameManager import GameManager
+from lichess.LichessAPI import LichessAPI
+from lichess.LichessCLI import LichessCLI
 
 logger = logging.getLogger(__name__)
 

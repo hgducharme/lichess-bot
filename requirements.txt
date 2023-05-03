@@ -1,6 +1,3 @@
-# Import the whole package in editable mode so we can use absolute imports across the project
--e .
-
 attrs==21.4.0
 certifi==2021.10.8
 charset-normalizer==2.0.12

@@ -1,6 +1,6 @@
 import logging
 
-from src.lichess.conf import settings
+from lichess.conf import settings
 
 logger = logging.getLogger(__name__)
 

@@ -1,5 +1,5 @@
 import logging
-from src.lichess.ChessGame import ChessGame
+from lichess.ChessGame import ChessGame
 
 logger = logging.getLogger(__name__)
 

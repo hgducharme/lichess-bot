@@ -1,7 +1,7 @@
 import json
 import logging
-from src.lichess.conf import settings
-from src.lichess.ContinuousThread import ContinuousThread
+from lichess.conf import settings
+from lichess.ContinuousThread import ContinuousThread
 
 logger = logging.getLogger(__name__)
 
