@@ -1,29 +1,24 @@
 import pytest
 import requests
+import responses
 
-@pytest.fixture(autouse=True)
+# @pytest.fixture(autouse=True)
 def disable_network_calls(monkeypatch):
     """Disable all calls to requests.sessions.Session.request for all tests."""
     def disabled_request():
         raise RuntimeError("HTTP requests not allowed during testing!")
     monkeypatch.setattr(requests.sessions.Session, "request", lambda *args, **kwargs: disabled_request())
 
-# TODO: This is probably how we mock our Session() object:
-# https://docs.pytest.org/en/latest/how-to/monkeypatch.html#monkeypatching-returned-objects-building-mock-classes
-# Or maybe using MagicMock()?:
-# https://gist.github.com/elnygren/7d4eb69ea1f2c6ba1a4865535f00ed2c
-# What is this?  https://gist.github.com/joepie91/5896273
-# Figure out a new way to mock requests.Session() objects
-# def mock_requests_session(mocker):
-#     mock_session = mocker.patch.object(requests, 'Session', autospec=True)
-#     mock_session.return_value.__enter__.return_value = mock_session
-#     return mock_session
+@pytest.fixture
+def mocked_responses():
+    with responses.RequestsMock() as rsps:
+        yield rsps
 
 class EngineStub:
     def __init__(self):
         pass
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def engine_stub():
     return EngineStub()
 
