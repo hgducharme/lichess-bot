@@ -1,7 +1,6 @@
 from lichess.GameManager import GameManager
 from lichess.LichessAPI import LichessAPI
 from lichess.ChallengeStreamWatcher import ChallengeStreamWatcher
-from lichess.test.conftest import *
 
 class TestChallengeStreamWatcher:
     def setup_method(self):

@@ -1,15 +1,15 @@
 from responses import _recorder
 
+from conftest import *
 from lichess.GameManager import GameManager
 from lichess.LichessAPI import LichessAPI
 from lichess.EventStreamWatcher import EventStreamWatcher
-from lichess.test.conftest import *
 from lichess.conf import settings
 
 @pytest.fixture(scope="module")
-@responses.activate
+# @responses.activate
 def event_stream_watcher(engine_stub):
-    responses.get()
+    # responses.get()
 
     # Setup dependencies
     api_session = requests.Session()
