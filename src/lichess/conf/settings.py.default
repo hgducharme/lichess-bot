@@ -113,32 +113,32 @@ LOGGING_CONFIG = {
             "level": "ERROR",
             "propagate": False
         },
-        "src.lichess.ChallengeStreamWatcher": {
+        "lichess.ChallengeStreamWatcher": {
             "handlers": [ "console", "error_file", "lichess" ],
             "level": "DEBUG",
             "propagate": False,
         },
-        "src.lichess.EventStreamWatcher": {
+        "lichess.EventStreamWatcher": {
             "handlers": [ "console", "error_file", "lichess" ],
             "level": "DEBUG",
             "propagate": False,
         },
-        "src.lichess.ContinuousThread": {
+        "lichess.ContinuousThread": {
             "handlers": ["console", "error_file", "lichess"],
             "level": "DEBUG",
             "propagate": False
         },
-        "src.lichess.ChessGame": {
+        "lichess.ChessGame": {
             "handlers": ["console", "error_file", "lichess"],
             "level": "DEBUG",
             "propagate": False
         },
-        "src.lichess.LichessAPI": {
+        "lichess.LichessAPI": {
             "handlers": ["console", "error_file", "lichess"],
             "level": "DEBUG",
             "propagate": False
         },
-        "src.lichess.LichessCLI": {
+        "lichess.LichessCLI": {
             "handlers": ["console", "error_file", "lichess"],
             "level": "DEBUG",
             "propagate": False

@@ -1,6 +1,6 @@
 import json
 import logging
-from src.lichess.ContinuousThread import ContinuousThread
+from lichess.ContinuousThread import ContinuousThread
 
 logger = logging.getLogger(__name__)
 

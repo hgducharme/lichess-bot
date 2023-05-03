@@ -1,10 +1,10 @@
 import pytest
 import requests
 
-from src.lichess.GameManager import GameManager
-from src.lichess.LichessAPI import LichessAPI
-from src.lichess.ChallengeStreamWatcher import ChallengeStreamWatcher
-from src.lichess.conf import settings
+from lichess.GameManager import GameManager
+from lichess.LichessAPI import LichessAPI
+from lichess.ChallengeStreamWatcher import ChallengeStreamWatcher
+from lichess.conf import settings
 
 @pytest.fixture
 def mock_requests_session(mocker):
