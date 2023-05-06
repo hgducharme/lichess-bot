@@ -1,6 +1,6 @@
 {
     "python.testing.pytestArgs": [
-        "src"
+        "test/lichess"
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true
