@@ -17,7 +17,7 @@ def event_stream_watcher():
     responses.add(
         responses.GET,
         LichessAPI.construct_url(LichessAPI.URL_ENDPOINTS["stream_events"]),
-        json = fake_event_stream,
+        body = fake_event_stream,
         status = 200,
     )
 
@@ -33,6 +33,7 @@ def event_stream_watcher():
 class TestEventStreamWatcher:
     def test_challengeUserGetsAddedToChallengeQueue(self, event_stream_watcher):
         test_user = "testuser"
+        event_stream_watcher.work()
         event_stream_watcher.challenge_user(test_user)
         assert test_user in self.event_stream_watcher.username_queue
 
