@@ -1,3 +1,4 @@
+from conftest import *
 from lichess.GameManager import GameManager
 from lichess.LichessAPI import LichessAPI
 from lichess.ChallengeStreamWatcher import ChallengeStreamWatcher
