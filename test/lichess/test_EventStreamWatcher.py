@@ -1,19 +1,29 @@
-from responses import _recorder
-
 from conftest import *
 from lichess.GameManager import GameManager
 from lichess.LichessAPI import LichessAPI
 from lichess.EventStreamWatcher import EventStreamWatcher
-from lichess.conf import settings
 
 @pytest.fixture(scope="module")
-# @responses.activate
-def event_stream_watcher(engine_stub):
-    # responses.get()
+@responses.activate
+def event_stream_watcher():
+    # EventManager queries the API for the lichess profile information upon instantiation,
+    # so we tell responses to expect this call and mock it
+    responses.add(
+        responses.GET,
+        LichessAPI.construct_url(LichessAPI.URL_ENDPOINTS["get_my_profile"]),
+        json = fake_profile_data,
+        status = 200,
+    )
+    responses.add(
+        responses.GET,
+        LichessAPI.construct_url(LichessAPI.URL_ENDPOINTS["stream_events"]),
+        json = fake_event_stream,
+        status = 200,
+    )
 
     # Setup dependencies
     api_session = requests.Session()
-    api_session.headers.update({"Authorization": f"Bearer {settings.API_TOKEN}"})
+    api_session.headers.update({"Authorization": f"Bearer {fake_oauth_token}"})
     api = LichessAPI(api_session)
     game_manager = GameManager(api, engine_stub)
 
