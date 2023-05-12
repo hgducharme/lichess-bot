@@ -71,7 +71,7 @@ class LichessAPI():
 
         return response
 
-    def stream_game_state(self, gameId):
+    def stream_bot_game_state(self, gameId):
         url = LichessAPI.construct_url(LichessAPI.URL_ENDPOINTS["stream_bot_game_state"], gameId = gameId)
         response = self.session.get(url, stream = True)
 

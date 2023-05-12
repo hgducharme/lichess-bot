@@ -14,7 +14,7 @@ class ChessGame(ContinuousThread):
         self.game_id = self.info["game"]["fullId"]
 
     def work(self):
-        game_stream = self.api.stream_game_state(self.game_id)
+        game_stream = self.api.stream_bot_game_state(self.game_id)
         for byte in game_stream:
             if byte:
                 logger.debug(f"From game stream: {json.loads(byte)}")
