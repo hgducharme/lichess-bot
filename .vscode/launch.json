@@ -18,7 +18,7 @@
             "name": "Debug Unit Test",
             "type": "python",
             "request": "test", // ignore this warning
-            "justMyCode": false,
+            "justMyCode": true,
         }
     ]
 }
