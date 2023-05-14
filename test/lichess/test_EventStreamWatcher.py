@@ -58,16 +58,14 @@ class TestEventStreamWatcher:
     def test_gameStartEventCreatesNewGameInGameManager(self, event_stream_watcher, mocked_responses):
         assert len(event_stream_watcher.game_manager.games) == 0
 
-        real_url = 'https://lichess.org/api/bot/game/stream/SV0lgdphuXLO'
-
         fake_gameId = json.loads(fake_gameStart)["game"]["fullId"]
-        params = {"gameId": fake_gameId}
         mocked_responses.add(
             responses.GET,
-            real_url, #LichessAPI.construct_url(LichessAPI.URL_ENDPOINTS["stream_bot_game_state"], gameId = fake_gameId),
+            LichessAPI.construct_url(LichessAPI.URL_ENDPOINTS["stream_bot_game_state"], gameId = fake_gameId),
             body = str.encode(fake_gameFull),
             status = 200,
         )
+
         event_stream_watcher.work()
 
         assert len(event_stream_watcher.game_manager.games) == 1
