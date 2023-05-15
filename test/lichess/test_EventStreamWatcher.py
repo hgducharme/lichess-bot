@@ -1,3 +1,5 @@
+import time
+
 from conftest import *
 from lichess.GameManager import GameManager
 from lichess.LichessAPI import LichessAPI
@@ -54,6 +56,7 @@ def event_stream_watcher(request, mocked_responses):
     return EventStreamWatcher(api, game_manager)
 
 class TestEventStreamWatcher:
+
     @pytest.mark.set_fake_event(fake_gameStart)
     def test_gameStartEventCreatesNewGameInGameManager(self, event_stream_watcher, mocked_responses):
         assert len(event_stream_watcher.game_manager.games) == 0
@@ -67,5 +70,7 @@ class TestEventStreamWatcher:
         )
 
         event_stream_watcher.work()
+
+        time.sleep(2)
 
         assert len(event_stream_watcher.game_manager.games) == 1
