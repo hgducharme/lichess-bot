@@ -25,10 +25,20 @@ def disable_network_calls(monkeysession):
 def fake_oauth_token():
     return "fake_oauth_token"
 
+@pytest.fixture(scope = "session", autouse = True)
+def empty_json_response():
+    return "{}"
+
 @pytest.fixture(scope="session")
 def engine_stub():
     class EngineStub:
         def __init__(self):
+            pass
+
+        def set_position(self, position):
+            pass
+
+        def get_best_move(self, wtime = None, btime = None):
             pass
     
     return EngineStub()
