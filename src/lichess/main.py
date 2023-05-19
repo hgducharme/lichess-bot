@@ -8,6 +8,7 @@ from lichess.EventStreamWatcher import EventStreamWatcher
 from lichess.GameManager import GameManager
 from lichess.LichessAPI import LichessAPI
 from lichess.LichessCLI import LichessCLI
+from lichess.ChessGameFactory import ChessGameFactory
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +21,8 @@ def main():
     api_session.headers.update({"Authorization": f"Bearer {settings.API_TOKEN}"})
     api = LichessAPI(api_session)
     stockfish = Stockfish(path = settings.ENGINE["path"], parameters = settings.ENGINE["stockfish_parameters"])
-    game_manager = GameManager(api, stockfish)
+    chess_game_factory = ChessGameFactory(api, stockfish)
+    game_manager = GameManager(chess_game_factory)
     challenge_stream_watcher = ChallengeStreamWatcher(api, game_manager, name = "challenge_stream_watcher", daemon = True)
     event_stream_watcher = EventStreamWatcher(api, game_manager, name = "event_stream_watcher", daemon = True)
 
