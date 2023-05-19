@@ -143,5 +143,10 @@ LOGGING_CONFIG = {
             "level": "DEBUG",
             "propagate": False
         },
+        "lichess.ChessGameFactory": {
+            "handlers": ["console", "error_file", "lichess"],
+            "level": "DEBUG",
+            "propagate": False
+        },
     } 
 }

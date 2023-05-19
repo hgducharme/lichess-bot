@@ -1,13 +1,11 @@
 import logging
-from lichess.ChessGame import ChessGame
 
 logger = logging.getLogger(__name__)
 
 class GameManager:
-    def __init__(self, lichess_api, engine):
+    def __init__(self, chess_game_factory):
         logger.debug(f"Creating an instance of {self.__class__.__name__}")
-        self.api = lichess_api
-        self.engine = engine
+        self.chess_game_factory = chess_game_factory
         self.games = {}
         self.accepting_games = True
 
@@ -18,10 +16,8 @@ class GameManager:
             logger.info(f"GameManager is not accepting games right now. Rejecting game {game_id}")
             return False
 
-        logger.info(f"Starting a new game. Game info: {game_info}")
-        game = ChessGame(self.api, self.engine, game_info, daemon = False)
+        game = self.chess_game_factory.create_game(game_info)
         self.games[game_id] = game
-        game.start()
 
         return True
 
