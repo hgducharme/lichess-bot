@@ -1,5 +1,5 @@
 from conftest import *
-from lichess.GameManager import GameManager
+from lichess.ChessGameManager import ChessGameManager
 from lichess.LichessAPI import LichessAPI
 from lichess.ChallengeStreamWatcher import ChallengeStreamWatcher
 

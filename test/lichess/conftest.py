@@ -1,6 +1,4 @@
-import json
 import pytest
-import requests
 import responses
 
 @pytest.fixture(scope='session')

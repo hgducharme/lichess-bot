@@ -1,4 +1,6 @@
 import json
+import requests
+from responses import matchers
 
 from conftest import *
 from lichess.conf import settings
@@ -117,15 +119,17 @@ class TestEventStreamWatcher:
         settings.ACCEPTING_CHALLENGES = False
 
         fake_challenge_id = fake_incomingChallenge["challenge"]["id"]
+        expected_request_body = {"reason": "generic"}
         url = LichessAPI.construct_url(LichessAPI.URL_ENDPOINTS["decline_challenge"], challengeId = fake_challenge_id)
         mocked_responses.add(
             responses.POST,
             url = url,
             json = empty_json_response,
             status = 200,
+            # This asserts that the request body is the same as expected_request_body
+            match = [matchers.urlencoded_params_matcher(expected_request_body)],
         )
 
         event_stream_watcher.work()
 
-        # TODO: Verify the response body is included in the API request by the client code
         assert mocked_responses.assert_call_count(url, 1) is True

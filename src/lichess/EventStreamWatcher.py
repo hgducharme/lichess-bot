@@ -30,14 +30,15 @@ class EventStreamWatcher(ContinuousThread):
     def _dispatch_event_action(self, line):
         event_type = line["type"]
         if event_type == "challenge":
-            challenging_user = line["challenge"]["challenger"]["id"]
-            if ( (not challenging_user == self.username) and settings.ACCEPTING_CHALLENGES ):
-                self.api.accept_challenge(line["challenge"]["id"])
-            else:
-                reason_for_decline = {
-                    "reason": "generic"
-                }
-                self.api.decline_challenge(line["challenge"]["id"], reason_for_decline)
+            challenging_user = line["challenge"]["challenger"]["name"]
+            if (not (challenging_user == self.username)):
+                if (settings.ACCEPTING_CHALLENGES):
+                    self.api.accept_challenge(line["challenge"]["id"])
+                else:
+                    reason_for_decline = {
+                        "reason": "generic"
+                    }
+                    self.api.decline_challenge(line["challenge"]["id"], reason_for_decline)
 
         elif event_type == "challengeDeclined":
             pass
