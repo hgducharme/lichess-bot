@@ -53,7 +53,7 @@ class EventStreamWatcher(ContinuousThread):
         elif event_type == "gameFinish":
             self.chess_game_manager.terminate_game(line["game"]["fullId"])
 
-        elif event_type == "challengeCancelled":
+        elif event_type == "challengeCanceled":
             pass
 
         else:
