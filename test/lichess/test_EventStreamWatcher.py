@@ -3,6 +3,7 @@ import time
 from conftest import *
 from lichess.GameManager import GameManager
 from lichess.LichessAPI import LichessAPI
+from lichess.MockChessGameFactory import MockChessGameFactory
 from lichess.EventStreamWatcher import EventStreamWatcher
 
 @pytest.fixture(scope="module")
@@ -12,8 +13,12 @@ def lichess_api():
     return LichessAPI(api_session)
 
 @pytest.fixture(scope="module")
-def game_manager(lichess_api, engine_stub):
-    return GameManager(lichess_api, engine_stub)
+def mock_chess_game_factory():
+    return MockChessGameFactory()
+
+@pytest.fixture(scope="module")
+def game_manager(mock_chess_game_factory):
+    return GameManager(mock_chess_game_factory)
 
 @pytest.fixture(scope='module')
 def mocked_responses():
@@ -59,37 +64,9 @@ def event_stream_watcher(request, lichess_api, game_manager):
 class TestEventStreamWatcher:
 
     @pytest.mark.set_fake_event(fake_gameStart)
-    @responses.activate
-    def test_gameStartEventCreatesNewGameInGameManager(self, event_stream_watcher, empty_json_response):
-        assert len(event_stream_watcher.game_manager.games) == 0
-
-        fake_gameId = json.loads(fake_gameStart)["game"]["fullId"]
-        responses.add(
-            responses.GET,
-            LichessAPI.construct_url(LichessAPI.URL_ENDPOINTS["stream_bot_game_state"], gameId = fake_gameId),
-            body = str.encode(fake_gameFull),
-            status = 200,
-        )
-
-        fake_move = None
-        responses.add(
-            responses.POST,
-            LichessAPI.construct_url(LichessAPI.URL_ENDPOINTS["make_a_bot_move"], gameId = fake_gameId, move = fake_move),
-            body = empty_json_response,
-            status = 200,
-        )
+    def test_gameStartEventCreatesNewGameInGameManager(self, event_stream_watcher, game_manager):
+        assert game_manager.number_of_games() == 0
 
         event_stream_watcher.work()
 
-        time.sleep(2)
-
-        assert len(event_stream_watcher.game_manager.games) == 1
-
-        responses.add(
-            responses.POST,
-            LichessAPI.construct_url(LichessAPI.URL_ENDPOINTS["abort_game"], gameId = fake_gameId),
-            body = empty_json_response,
-            status = 200,
-        )
-
-        event_stream_watcher.game_manager.terminate_game(fake_gameId)
+        assert game_manager.number_of_games() == 1
