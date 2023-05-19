@@ -3,35 +3,18 @@ import pytest
 import requests
 import responses
 
-# This allows us to use monkeypatch in non-function scoped fixtures,
-# specifically in disable_network_calls() so we can disable HTTP requests
-# during the entire testing session
-# see: https://github.com/pytest-dev/pytest/issues/363
-@pytest.fixture(scope="session")
-def monkeysession():
-    with pytest.MonkeyPatch.context() as mp:
-        yield mp
+@pytest.fixture(scope='session')
+def mocked_responses():
+    with responses.RequestsMock() as rsps:
+        yield rsps
 
-# This overrides the responses library so we can't use this. If we forget to mock the HTTP request
-# with the responses library then the actual HTTP request will hit the remote server.
-# @pytest.fixture(autouse=True, scope="session")
-def disable_network_calls(monkeysession):
-    """Disable all calls to requests.sessions.Session.request for all tests."""
-    def disabled_request():
-        raise RuntimeError("HTTP requests not allowed during testing!")
-    monkeysession.setattr("requests.sessions.Session.request", lambda *args, **kwargs: disabled_request())
-
-@pytest.fixture(scope="session")
-def fake_oauth_token():
-    return "fake_oauth_token"
-
-@pytest.fixture(scope = "session", autouse = True)
+@pytest.fixture(scope = "session")
 def empty_json_response():
     return "{}"
 
 @pytest.fixture(scope="session")
-def engine_stub():
-    class EngineStub:
+def mock_engine():
+    class MockEngine:
         def __init__(self):
             pass
 
@@ -41,7 +24,7 @@ def engine_stub():
         def get_best_move(self, wtime = None, btime = None):
             pass
     
-    return EngineStub()
+    return MockEngine()
 
 # Sample challenge data as how we see it from the lichess api
 mock_challenges = [
