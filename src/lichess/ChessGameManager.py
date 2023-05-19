@@ -7,12 +7,12 @@ class ChessGameManager:
         logger.debug(f"Creating an instance of {self.__class__.__name__}")
         self.chess_game_factory = chess_game_factory
         self.games = {}
-        self.accepting_games = True
+        self._is_accepting_games = True
 
     def start_new_game(self, game_info):
         game_id = game_info["game"]["fullId"]
 
-        if (not self.accepting_games):
+        if (not self.is_accepting_games):
             logger.info(f"ChessGameManager is not accepting games right now. Rejecting game {game_id}")
             return False
 
@@ -32,7 +32,7 @@ class ChessGameManager:
         return len(self.games)
 
     def terminate_all_games(self, wait = True):
-        self.stop_accepting_games()
+        self.is_accepting_games = False
         for game_id in list(self.games.keys()):
             self.terminate_game(game_id, wait)
 
@@ -60,5 +60,12 @@ class ChessGameManager:
             
             del self.games[game_id]
 
-    def stop_accepting_games(self):
-        self.accepting_games = False
+    @property
+    def is_accepting_games(self):
+        return self._is_accepting_games
+    
+    @is_accepting_games.setter
+    def is_accepting_games(self, value):
+        if (not isinstance(value, bool)):
+            raise ValueError("is_accepting_games can only be either 'True' or 'False'")
+        self._is_accepting_games = value
