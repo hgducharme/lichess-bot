@@ -13,6 +13,5 @@ class ChessGameFactory(IChessGameFactory):
 
     def create_game(self, game_info):
         game = ChessGame(self.api, self.engine, game_info, daemon = False)
-        game.start()
 
         return game

@@ -17,6 +17,7 @@ class ChessGameManager:
             return False
 
         game = self.chess_game_factory.create_game(game_info)
+        game.start()
         self.games[game_id] = game
 
         return True
