@@ -10,6 +10,7 @@ LICHESS_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 API_TOKEN = "xxxxxxx"
 MAX_NUMBER_OF_GAMES = 5
 AUTO_MATCHMAKING = False
+ACCEPTING_CHALLENGES = False
 CHALLENGE_PARAMS = {
     "correspondance": {
         "rated": "false",
