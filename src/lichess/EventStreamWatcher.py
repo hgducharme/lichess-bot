@@ -5,10 +5,10 @@ from lichess.ContinuousThread import ContinuousThread
 logger = logging.getLogger(__name__)
 
 class EventStreamWatcher(ContinuousThread):
-    def __init__(self, lichess_api, game_manager, *args, **kwargs):
+    def __init__(self, lichess_api, chess_game_manager, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.api = lichess_api
-        self.game_manager = game_manager
+        self.chess_game_manager = chess_game_manager
         self.username = self.api.get_profile().json()["username"]
 
         # Initialize event stream upon instantiation of this class
@@ -35,12 +35,12 @@ class EventStreamWatcher(ContinuousThread):
             pass
         elif event_type == "gameStart":
             logger.info("Starting a new game.")
-            game_started = self.game_manager.start_new_game(line)
+            game_started = self.chess_game_manager.start_new_game(line)
             if (not game_started):
                 # TODO: decline/abort the game
                 pass
         elif event_type == "gameFinish":
-            self.game_manager.terminate_game(line["game"]["fullId"])
+            self.chess_game_manager.terminate_game(line["game"]["fullId"])
         elif event_type == "challengeCancelled":
             pass
         else:

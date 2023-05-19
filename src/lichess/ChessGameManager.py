@@ -2,7 +2,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class GameManager:
+class ChessGameManager:
     def __init__(self, chess_game_factory):
         logger.debug(f"Creating an instance of {self.__class__.__name__}")
         self.chess_game_factory = chess_game_factory
@@ -13,7 +13,7 @@ class GameManager:
         game_id = game_info["game"]["fullId"]
 
         if (not self.accepting_games):
-            logger.info(f"GameManager is not accepting games right now. Rejecting game {game_id}")
+            logger.info(f"ChessGameManager is not accepting games right now. Rejecting game {game_id}")
             return False
 
         game = self.chess_game_factory.create_game(game_info)
@@ -43,7 +43,7 @@ class GameManager:
             return
 
         if wait:
-            logger.info(f"GameManager is waiting for game {game_id} to finish...")
+            logger.info(f"ChessGameManager is waiting for game {game_id} to finish...")
 
             # game.join()
             # TODO: We join to a game, waiting for it to finish, and when the event_stream_watcher
@@ -51,9 +51,9 @@ class GameManager:
             # and try to do everything again but the thread no longer exists, and we get an error when we 
             # try to "del self.games[game_id]"
         else:
-            logger.info(f"GameManager is attempting to terminate game {game_id}...")
+            logger.info(f"ChessGameManager is attempting to terminate game {game_id}...")
             game.stop()
-            logger.debug(f"GameManager is blocking until game {game_id} thread has been killed...")
+            logger.debug(f"ChessGameManager is blocking until game {game_id} thread has been killed...")
             game.join()
             logger.info(f"Game {game_id} has ended.")
             
