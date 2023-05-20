@@ -1,27 +1,9 @@
 import json
-import requests
 from responses import matchers
 
 from conftest import *
 from lichess.conf import settings
-from lichess.ChessGameManager import ChessGameManager
-from lichess.LichessAPI import LichessAPI
-from lichess.MockChessGameFactory import MockChessGameFactory
 from lichess.EventStreamDispatcher import EventStreamDispatcher
-
-@pytest.fixture(scope="module")
-def lichess_api():
-    api_session = requests.Session()
-    api_session.headers.update({"Authorization": f"Bearer fake_oauth_token"})
-    return LichessAPI(api_session)
-
-@pytest.fixture(scope="module")
-def mock_chess_game_factory():
-    return MockChessGameFactory()
-
-@pytest.fixture(scope="module")
-def chess_game_manager(mock_chess_game_factory):
-    return ChessGameManager(mock_chess_game_factory)
 
 @pytest.fixture(scope="function")
 def event_stream_dispatcher(request, lichess_api, chess_game_manager, mocked_responses):
