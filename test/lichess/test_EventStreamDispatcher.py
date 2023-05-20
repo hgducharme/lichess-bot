@@ -48,35 +48,35 @@ class TestEventStreamDispatcher:
     @pytest.mark.set_fake_event(fake_gameFinish)
     def test_gameFinishEventDeletesGame(self, event_stream_dispatcher, chess_game_manager):
         chess_game_manager.start_new_game(fake_gameStart)
-        number_of_games = chess_game_manager.number_of_games()
+        assert chess_game_manager.number_of_games() == 1
 
         event_stream_dispatcher.work()
 
-        assert chess_game_manager.number_of_games() == number_of_games - 1
+        assert chess_game_manager.number_of_games() == 0
 
     @pytest.mark.set_fake_event(fake_outgoingChallenge)
     def test_outgoingChallengeEventCreatedByTheBotDoesNothing(self, event_stream_dispatcher, chess_game_manager):
-        number_of_games = chess_game_manager.number_of_games()
+        assert chess_game_manager.number_of_games() == 0
 
         event_stream_dispatcher.work()
 
-        assert chess_game_manager.number_of_games() == number_of_games
+        assert chess_game_manager.number_of_games() == 0
 
     @pytest.mark.set_fake_event(fake_outgoingChallengeDeclined)
     def test_challengeDeclinedEventDoesNothing(self, event_stream_dispatcher, chess_game_manager):
-        number_of_games = chess_game_manager.number_of_games()
-
+        assert chess_game_manager.number_of_games() == 0
+        
         event_stream_dispatcher.work()
 
-        assert chess_game_manager.number_of_games() == number_of_games
+        assert chess_game_manager.number_of_games() == 0
 
     @pytest.mark.set_fake_event(fake_incomingChallengeCancelled)
     def test_incomingChallengeCanceledEventDoesNothing(self, event_stream_dispatcher, chess_game_manager):
-        number_of_games = chess_game_manager.number_of_games()
+        assert chess_game_manager.number_of_games() == 0
 
         event_stream_dispatcher.work()
 
-        assert chess_game_manager.number_of_games() == number_of_games
+        assert chess_game_manager.number_of_games() == 0
 
     @pytest.mark.set_fake_event(fake_incomingChallenge)
     def test_incomingChallengeGetsAcceptedIfAcceptingChallengesFlagIsTrue(self, mocked_responses, event_stream_dispatcher, empty_json_response):
