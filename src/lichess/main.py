@@ -4,7 +4,7 @@ from stockfish import Stockfish
 
 from lichess.conf import settings
 from lichess.ChallengeStreamWatcher import ChallengeStreamWatcher
-from lichess.EventStreamWatcher import EventStreamWatcher
+from lichess.EventStreamDispatcher import EventStreamDispatcher
 from lichess.ChessGameManager import ChessGameManager
 from lichess.LichessAPI import LichessAPI
 from lichess.LichessCLI import LichessCLI
@@ -24,7 +24,7 @@ def main():
     chess_game_factory = ChessGameFactory(api, stockfish)
     chess_game_manager = ChessGameManager(chess_game_factory)
     challenge_stream_watcher = ChallengeStreamWatcher(api, chess_game_manager, name = "challenge_stream_watcher", daemon = True)
-    event_stream_watcher = EventStreamWatcher(api, chess_game_manager, name = "event_stream_watcher", daemon = True)
+    event_stream_watcher = EventStreamDispatcher(api, chess_game_manager, name = "event_stream_watcher", daemon = True)
 
     # Start threads
     event_stream_watcher.start()
