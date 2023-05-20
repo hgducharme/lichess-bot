@@ -6,7 +6,7 @@ from lichess.ContinuousThread import ContinuousThread
 
 logger = logging.getLogger(__name__)
 
-class EventStreamWatcher(ContinuousThread):
+class EventStreamDispatcher(ContinuousThread):
     def __init__(self, lichess_api, chess_game_manager, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.api = lichess_api
