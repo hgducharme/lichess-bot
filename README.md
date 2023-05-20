@@ -67,3 +67,17 @@ Make sure everything works!
  cd chessAI/src/lichess/
  python3 main.py
  ```
+
+# Running Tests
+
+To run the tests from the root directory:
+
+```
+pytest test/lichess/
+```
+
+To run a coverage report:
+
+```
+coverage run --source=src/lichess -m pytest -v test/lichess/ && coverage report -m
+```

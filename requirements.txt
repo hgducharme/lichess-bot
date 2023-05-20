@@ -12,9 +12,12 @@ pluggy==1.0.0
 py==1.11.0
 pyparsing==3.0.8
 pytest==7.1.1
+PyYAML==6.0
 requests==2.27.1
+responses==0.23.1
 six==1.16.0
 stockfish==3.23.0
 tomli==2.0.1
+types-PyYAML==6.0.12.9
 urllib3==1.26.9
 virtualenv==20.14.0

@@ -6,17 +6,17 @@ from lichess.ContinuousThread import ContinuousThread
 logger = logging.getLogger(__name__)
 
 class ChallengeStreamWatcher(ContinuousThread):
-    def __init__(self, lichess_api, game_manager, *args, **kwargs):
+    def __init__(self, lichess_api, chess_game_manager, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.api = lichess_api
-        self.game_manager = game_manager
+        self.chess_game_manager = chess_game_manager
         self.username_queue = []
         
         # Initialize challenge stream upon instantiation of this class
         self.challenges_stream = self.api.stream_challenges()
 
     def work(self):
-        if self.game_manager.number_of_games() == settings.MAX_NUMBER_OF_GAMES:
+        if self.chess_game_manager.number_of_games() == settings.MAX_NUMBER_OF_GAMES:
             return
 
         if len(self.username_queue) > 0:

@@ -14,10 +14,10 @@ MENU_OPTIONS = {
 }
 
 class LichessCLI:
-    def __init__(self, lichess_api, game_manager, challenge_stream_watcher, event_stream_watcher, threads):
+    def __init__(self, lichess_api, chess_game_manager, challenge_stream_watcher, event_stream_watcher, threads):
         self.is_running = True
         self.api = lichess_api
-        self.game_manager = game_manager
+        self.chess_game_manager = chess_game_manager
         self.challenge_stream_watcher = challenge_stream_watcher
         self.event_stream_watcher = event_stream_watcher
         self.threads = threads
@@ -84,8 +84,8 @@ class LichessCLI:
             return False
 
     def _close_all_games(self):
-        if self.game_manager.do_games_exist():
-            command = input(f"There are currently {self.game_manager.number_of_games()} game(s) being played. Do you want to terminate all games? [(Y)es, (N)o]: ")
+        if self.chess_game_manager.do_games_exist():
+            command = input(f"There are currently {self.chess_game_manager.number_of_games()} game(s) being played. Do you want to terminate all games? [(Y)es, (N)o]: ")
 
             valid_commands = ("yes", "y", "no", "n")
             while (command.strip().lower() not in valid_commands):
@@ -94,10 +94,10 @@ class LichessCLI:
 
             if command == "y" or command == "yes":
                 print("Terminating all games...")
-                self.game_manager.terminate_all_games(wait = False)
+                self.chess_game_manager.terminate_all_games(wait = False)
             elif command == "n" or command == "no":
                 print("The program will end once all games have finished...")
-                # self.game_manager.terminate_all_games(wait = True)
+                # self.chess_game_manager.terminate_all_games(wait = True)
 
     def _close_all_threads(self):
         for thread in self.threads:

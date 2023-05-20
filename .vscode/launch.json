@@ -5,20 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "justMyCode": true
-        },
-        {
-            "name": "Python: main.py",
+            "name": "Lichess CLI main.py",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/src/lichess/main.py",
             "console": "integratedTerminal",
-            "justMyCode": false
+            "justMyCode": true
+        },
+        // This tells vscode unit test debugging to step into third-party code
+        // see: https://github.com/microsoft/vscode-python/issues/7131#issuecomment-525873210
+        {
+            "name": "Debug Unit Test",
+            "type": "python",
+            "request": "test", // ignore this warning
+            "justMyCode": true,
         }
     ]
 }
