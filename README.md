@@ -81,3 +81,9 @@ To run a coverage report:
 ```
 coverage run --source=src/lichess -m pytest -v test/lichess/ && coverage report -m
 ```
+
+To see a nicer coverage output (run from the same directory you ran the above coverage command):
+
+```
+coverage html && open htmlcov/index.html
+```
