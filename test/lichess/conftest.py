@@ -1,5 +1,10 @@
 import pytest
 import responses
+import requests
+
+from lichess.LichessAPI import LichessAPI
+from lichess.MockChessGameFactory import MockChessGameFactory
+from lichess.ChessGameManager import ChessGameManager
 
 @pytest.fixture(scope='session')
 def mocked_responses():
@@ -9,6 +14,19 @@ def mocked_responses():
 @pytest.fixture(scope = "session", autouse=True)
 def empty_json_response():
     return "{}"
+
+@pytest.fixture(scope="module")
+def lichess_api():
+    api_session = requests.Session()
+    api_session.headers.update({"Authorization": f"Bearer fake_oauth_token"})
+    return LichessAPI(api_session)
+
+
+@pytest.fixture(scope="function")
+def chess_game_manager(mock_chess_game_factory):
+    yield ChessGameManager(mock_chess_game_factory)
+
+    mock_chess_game_factory.create_game_counter = 0
 
 @pytest.fixture(scope="session")
 def mock_engine():
@@ -23,6 +41,10 @@ def mock_engine():
             pass
     
     return MockEngine()
+
+@pytest.fixture(scope = "session")
+def mock_chess_game_factory():
+    return MockChessGameFactory()
 
 # Sample profile data as how we see it from the lichess API
 fake_profile_data = {'id': 'stockai', 'username': 'stockAI', 'perfs': {'blitz': {'games': 0, 'rating': 2000, 'rd': 500, 'prog': 0, 'prov': True}, 'bullet': {'games': 0, 'rating': 2000, 'rd': 500, 'prog': 0, 'prov': True}, 'correspondence': {'games': 0, 'rating': 2000, 'rd': 500, 'prog': 0, 'prov': True}, 'classical': {'games': 0, 'rating': 2000, 'rd': 500, 'prog': 0, 'prov': True}, 'rapid': {'games': 0, 'rating': 2000, 'rd': 500, 'prog': 0, 'prov': True}}, 'title': 'BOT', 'createdAt': 1648830192548, 'seenAt': 1682201618956, 'playTime': {'total': 2820, 'tv': 0}, 'url': 'https://lichess.org/@/stockAI', 'count': {'all': 36, 'rated': 0, 'ai': 0, 'draw': 0, 'drawH': 0, 'loss': 6, 'lossH': 6, 'win': 30, 'winH': 30, 'bookmark': 0, 'playing': 0, 'import': 0, 'me': 0}, 'followable': True, 'following': False, 'blocking': False, 'followsYou': False}

@@ -1,27 +1,9 @@
 import json
-import requests
 from responses import matchers
 
 from conftest import *
 from lichess.conf import settings
-from lichess.ChessGameManager import ChessGameManager
-from lichess.LichessAPI import LichessAPI
-from lichess.MockChessGameFactory import MockChessGameFactory
 from lichess.EventStreamDispatcher import EventStreamDispatcher
-
-@pytest.fixture(scope="module")
-def lichess_api():
-    api_session = requests.Session()
-    api_session.headers.update({"Authorization": f"Bearer fake_oauth_token"})
-    return LichessAPI(api_session)
-
-@pytest.fixture(scope="module")
-def mock_chess_game_factory():
-    return MockChessGameFactory()
-
-@pytest.fixture(scope="module")
-def chess_game_manager(mock_chess_game_factory):
-    return ChessGameManager(mock_chess_game_factory)
 
 @pytest.fixture(scope="function")
 def event_stream_dispatcher(request, lichess_api, chess_game_manager, mocked_responses):
@@ -66,35 +48,35 @@ class TestEventStreamDispatcher:
     @pytest.mark.set_fake_event(fake_gameFinish)
     def test_gameFinishEventDeletesGame(self, event_stream_dispatcher, chess_game_manager):
         chess_game_manager.start_new_game(fake_gameStart)
-        number_of_games = chess_game_manager.number_of_games()
+        assert chess_game_manager.number_of_games() == 1
 
         event_stream_dispatcher.work()
 
-        assert chess_game_manager.number_of_games() == number_of_games - 1
+        assert chess_game_manager.number_of_games() == 0
 
     @pytest.mark.set_fake_event(fake_outgoingChallenge)
     def test_outgoingChallengeEventCreatedByTheBotDoesNothing(self, event_stream_dispatcher, chess_game_manager):
-        number_of_games = chess_game_manager.number_of_games()
+        assert chess_game_manager.number_of_games() == 0
 
         event_stream_dispatcher.work()
 
-        assert chess_game_manager.number_of_games() == number_of_games
+        assert chess_game_manager.number_of_games() == 0
 
     @pytest.mark.set_fake_event(fake_outgoingChallengeDeclined)
     def test_challengeDeclinedEventDoesNothing(self, event_stream_dispatcher, chess_game_manager):
-        number_of_games = chess_game_manager.number_of_games()
-
+        assert chess_game_manager.number_of_games() == 0
+        
         event_stream_dispatcher.work()
 
-        assert chess_game_manager.number_of_games() == number_of_games
+        assert chess_game_manager.number_of_games() == 0
 
     @pytest.mark.set_fake_event(fake_incomingChallengeCancelled)
     def test_incomingChallengeCanceledEventDoesNothing(self, event_stream_dispatcher, chess_game_manager):
-        number_of_games = chess_game_manager.number_of_games()
+        assert chess_game_manager.number_of_games() == 0
 
         event_stream_dispatcher.work()
 
-        assert chess_game_manager.number_of_games() == number_of_games
+        assert chess_game_manager.number_of_games() == 0
 
     @pytest.mark.set_fake_event(fake_incomingChallenge)
     def test_incomingChallengeGetsAcceptedIfAcceptingChallengesFlagIsTrue(self, mocked_responses, event_stream_dispatcher, empty_json_response):

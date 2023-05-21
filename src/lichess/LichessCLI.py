@@ -94,10 +94,22 @@ class LichessCLI:
 
             if command == "y" or command == "yes":
                 print("Terminating all games...")
-                self.chess_game_manager.terminate_all_games(wait = False)
+                # TODO: This story wont work because chess_game_manager calls
+                # chess_game.stop() and that sets the stop event flag, but the thread
+                # is in an infinite loop reading from the game stream, so it won't
+                # exit out to the loop inside ContinuousWorker and see the stop event flag
+                # has been set. We might need to do the same thing we did in EventStreamDispatcher
+                # with the next() function.
+                self.chess_game_manager.terminate_all_games()
+
             elif command == "n" or command == "no":
                 print("The program will end once all games have finished...")
-                # self.chess_game_manager.terminate_all_games(wait = True)
+
+                # Make sure no games get started or challenges get accepted
+                settings.ACCEPTING_CHALLENGES = False
+                settings.AUTO_MATCHMAKING = False
+
+                self.chess_game_manager.return_when_all_games_are_finished()
 
     def _close_all_threads(self):
         for thread in self.threads:
