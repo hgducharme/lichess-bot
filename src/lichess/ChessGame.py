@@ -57,7 +57,7 @@ class ChessGame(ContinuousThread):
 
         return False
 
-    def _abort_or_resign(self):
+    def abort_or_resign(self):
         number_of_moves = self.get_number_of_moves()
         if (number_of_moves > 1):
             logger.info(f"Resigning game {self.game_id}")
