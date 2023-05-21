@@ -47,8 +47,8 @@ class EventStreamDispatcher(ContinuousThread):
             logger.info("Starting a new game.")
             game_started = self.chess_game_manager.start_new_game(line)
             if (not game_started):
-                # TODO: decline/abort the game
-                pass
+                game_id = line["game"]["fullId"]
+                self.api.abort_game(game_id)
 
         elif event_type == "gameFinish":
             self.chess_game_manager.terminate_game(line["game"]["fullId"])
@@ -58,7 +58,3 @@ class EventStreamDispatcher(ContinuousThread):
 
         else:
             pass
-
-    def _cleanup(self):
-        # TODO: Cleanup resources
-        return

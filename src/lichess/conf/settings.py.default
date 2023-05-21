@@ -119,7 +119,7 @@ LOGGING_CONFIG = {
             "level": "DEBUG",
             "propagate": False,
         },
-        "lichess.EventStreamWatcher": {
+        "lichess.EventStreamDispatcher": {
             "handlers": [ "console", "error_file", "lichess" ],
             "level": "DEBUG",
             "propagate": False,

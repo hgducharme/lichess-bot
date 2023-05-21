@@ -115,3 +115,19 @@ class TestEventStreamDispatcher:
         event_stream_dispatcher.work()
 
         assert mocked_responses.assert_call_count(url, 1) is True
+
+    @pytest.mark.set_fake_event(fake_gameStart)
+    def test_startedGameIsAbortedIfChessGameManagerIsntAcceptingGames(self, event_stream_dispatcher, chess_game_manager, mocked_responses, empty_json_response):
+        chess_game_manager.is_accepting_games = False
+
+        url = LichessAPI.construct_url(LichessAPI.URL_ENDPOINTS["abort_game"], gameId = fake_gameStart["game"]["fullId"])
+        mocked_responses.add(
+            responses.POST,
+            url = url,
+            json = empty_json_response,
+            status = 200,
+        )
+
+        event_stream_dispatcher.work()
+
+        assert mocked_responses.assert_call_count(url, 1) is True
