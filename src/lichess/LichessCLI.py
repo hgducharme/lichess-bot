@@ -27,7 +27,12 @@ class LichessCLI:
 
         while self.is_running:
             self._print_menu()
-            command = int(input("Enter your choice: "))
+            try:
+                command = int(input("Enter your choice: "))
+            except ValueError as e:
+                print("")
+                print("ERROR: your command must be an integer")
+                continue
 
             if (command == 1):
                 self._toggle_automatic_matchmaking()
@@ -39,14 +44,9 @@ class LichessCLI:
             elif (command == 4):
                 self._print_menu()
             elif (command == 5):
-                '''
-                TODO:
-                1) Detect Ctrl-C and route it to this option
-                2) Gracefully shut down all threads and release their memory
-                '''
                 self._quit()
             else:
-                print("Sorry, I don't understand that command. Please try again.")
+                print("Sorry, that is not a valid option. Please try again.")
 
     def _print_menu(self):
         print("")
