@@ -32,29 +32,31 @@ class ChessGameManager:
     
     def number_of_games(self):
         return len(self.games)
+    
+    def return_when_all_games_are_finished(self):
+        for game_id in list(self.games.keys()):
+            game = self.games[game_id]
+            logger.info(f"ChessGameManager is waiting for game {game_id} to finish...")
+            game.join()
 
-    def terminate_all_games(self, wait = True):
+    def terminate_all_games(self):
         self.is_accepting_games = False
         for game_id in list(self.games.keys()):
-            self.terminate_game(game_id, wait)
+            self.terminate_game(game_id)
 
-    def terminate_game(self, game_id, wait = False):
+    def terminate_game(self, game_id):
         try:
             game = self.games[game_id]
         except KeyError as err:
             logger.error(f"Tried to terminate game {game_id}, but it is not saved in the list of games.")
             return
 
-        if wait:
-            logger.info(f"ChessGameManager is waiting for game {game_id} to finish...")
-            game.join()
-        else:
-            logger.info(f"ChessGameManager is attempting to terminate game {game_id}...")
-            game.stop()
-            logger.debug(f"ChessGameManager is blocking until game {game_id} thread has been killed...")
-            game.join()
-            logger.info(f"Game {game_id} has ended.")       
-            del self.games[game_id]
+        logger.info(f"ChessGameManager is attempting to terminate game {game_id}...")
+        game.stop()
+        logger.debug(f"ChessGameManager is blocking until game {game_id} thread has been killed...")
+        game.join()
+        logger.info(f"Game {game_id} has ended.")       
+        del self.games[game_id]
 
     @property
     def games(self):
