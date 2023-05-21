@@ -99,3 +99,12 @@ class TestChessGameManager:
     def test_isAcceptingGamesProperty_onlyAllowsBooleanValues(self, chess_game_manager, value):
         with pytest.raises(TypeError):
             chess_game_manager.is_accepting_games = value
+
+    def test_returnWhenAllGamesAreFinished_joinsToThread(self, chess_game_manager):
+        chess_game_manager.start_new_game(fake_gameStart)
+
+        game = chess_game_manager.games[fake_gameStart["game"]["fullId"]]
+
+        chess_game_manager.return_when_all_games_are_finished()
+
+        assert game.join_counter == 1
