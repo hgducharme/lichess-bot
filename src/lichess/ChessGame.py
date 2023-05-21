@@ -57,13 +57,6 @@ class ChessGame(ContinuousThread):
 
         return False
 
-    def _cleanup(self):
-        # If the game is currently running, then abort or resign. Otherwise, do nothing
-        # TODO: This MIGHT be a race condition. If EventStreamWatcher tells us to terminate the game and we reach
-        # this before ChessGame gets a new state that says the game is finished, this might try to execute
-        if self.game_state["status"] == "started":
-            self._abort_or_resign()
-
     def _abort_or_resign(self):
         number_of_moves = self.get_number_of_moves()
         if (number_of_moves > 1):
