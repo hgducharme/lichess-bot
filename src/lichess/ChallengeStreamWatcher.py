@@ -68,5 +68,4 @@ class ChallengeStreamWatcher(ContinuousThread):
         online_bots = self._parse_stream(online_bots)
 
     def _cleanup(self):
-        # TODO: Cleanup resources
         return
