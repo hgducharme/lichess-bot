@@ -114,7 +114,7 @@ LOGGING_CONFIG = {
             "level": "ERROR",
             "propagate": False
         },
-        "lichess.ChallengeStreamWatcher": {
+        "lichess.ChallengeSender": {
             "handlers": [ "console", "error_file", "lichess" ],
             "level": "DEBUG",
             "propagate": False,

@@ -14,11 +14,11 @@ MENU_OPTIONS = {
 }
 
 class LichessCLI:
-    def __init__(self, lichess_api, chess_game_manager, challenge_stream_watcher, event_stream_watcher, threads):
+    def __init__(self, lichess_api, chess_game_manager, challenge_sender, event_stream_watcher, threads):
         self.is_running = True
         self.api = lichess_api
         self.chess_game_manager = chess_game_manager
-        self.challenge_stream_watcher = challenge_stream_watcher
+        self.challenge_sender = challenge_sender
         self.event_stream_watcher = event_stream_watcher
         self.threads = threads
 
@@ -61,7 +61,7 @@ class LichessCLI:
         return 0
 
     def _challenge_user(self, username):
-        self.challenge_stream_watcher.challenge_user(username)
+        self.challenge_sender.send_challenge(username, settings.CHALLENGE_PARAMS["real_time"])
         
     def _quit(self):
         continue_to_quit = self._confirm_quit_command()
