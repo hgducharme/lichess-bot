@@ -19,7 +19,7 @@ class ChessGameManager:
         # If the game already exists just return early
         if game_id in self.games:
             logger.info(f"Chess game {game_id} already exists!")
-            return False
+            return True
 
         game = self.chess_game_factory.create_game(game_info)
         game.start()

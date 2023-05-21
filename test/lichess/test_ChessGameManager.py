@@ -36,7 +36,7 @@ class TestChessGameManager:
         game_started2 = chess_game_manager.start_new_game(fake_gameStart)        
 
         assert game_started1 == True
-        assert game_started2 == False
+        assert game_started2 == True
         assert mock_chess_game_factory.create_game_counter == 1
 
     def test_startNewGame_rejectsGameIfNotAcceptingGamesIsTrue(self, chess_game_manager, mock_chess_game_factory):
