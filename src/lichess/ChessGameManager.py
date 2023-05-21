@@ -6,7 +6,7 @@ class ChessGameManager:
     def __init__(self, chess_game_factory):
         logger.debug(f"Creating an instance of {self.__class__.__name__}")
         self.chess_game_factory = chess_game_factory
-        self.games = {}
+        self._games = {}
         self._is_accepting_games = True
 
     def start_new_game(self, game_info):
@@ -14,6 +14,11 @@ class ChessGameManager:
 
         if (not self.is_accepting_games):
             logger.info(f"ChessGameManager is not accepting games right now. Rejecting game {game_id}")
+            return False
+        
+        # If the game already exists just return early
+        if game_id in self.games:
+            logger.info(f"Chess game {game_id} already exists!")
             return False
 
         game = self.chess_game_factory.create_game(game_info)
@@ -23,10 +28,7 @@ class ChessGameManager:
         return True
 
     def do_games_exist(self):
-        if (self.number_of_games() > 0):
-            return True
-        
-        return False
+        return (self.number_of_games() > 0)
     
     def number_of_games(self):
         return len(self.games)
@@ -45,20 +47,18 @@ class ChessGameManager:
 
         if wait:
             logger.info(f"ChessGameManager is waiting for game {game_id} to finish...")
-
-            # game.join()
-            # TODO: We join to a game, waiting for it to finish, and when the event_stream_watcher
-            # class gets a game finish it also trys to terminate the game, it stops it, then we resume right here,
-            # and try to do everything again but the thread no longer exists, and we get an error when we 
-            # try to "del self.games[game_id]"
+            game.join()
         else:
             logger.info(f"ChessGameManager is attempting to terminate game {game_id}...")
             game.stop()
             logger.debug(f"ChessGameManager is blocking until game {game_id} thread has been killed...")
             game.join()
-            logger.info(f"Game {game_id} has ended.")
-            
+            logger.info(f"Game {game_id} has ended.")       
             del self.games[game_id]
+
+    @property
+    def games(self):
+        return self._games
 
     @property
     def is_accepting_games(self):
@@ -67,5 +67,5 @@ class ChessGameManager:
     @is_accepting_games.setter
     def is_accepting_games(self, value):
         if (not isinstance(value, bool)):
-            raise ValueError("is_accepting_games can only be either 'True' or 'False'")
+            raise TypeError("is_accepting_games can only be either 'True' or 'False'")
         self._is_accepting_games = value
