@@ -36,7 +36,6 @@ class ChessGame(ContinuousThread):
             pass
 
     def _move(self):
-        # TODO: This for some reason isn't working if the first move is ours.
         if (self.is_our_turn()):
             logger.debug("It's our turn. Getting move from engine...")
             moves = self.get_moves()
