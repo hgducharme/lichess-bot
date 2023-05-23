@@ -51,15 +51,9 @@ class LichessAPI():
         return response
 
     def is_bot_account(self):
-        profile = self.get_profile()
+        profile = self.get_profile().json()
 
-        try:
-            title = profile["title"]
-            is_bot = title == "BOT"
-        except KeyError as err:
-            is_bot = False
-
-        return is_bot
+        return profile["title"] == "BOT"
 
     def move(self, gameId, move, offeringDraw = False):
         url = LichessAPI.construct_url(LichessAPI.URL_ENDPOINTS["make_a_bot_move"], gameId = gameId, move = move)
