@@ -4,7 +4,6 @@ from lichess.conf import settings
 
 logger = logging.getLogger(__name__)
 
-# TODO: Maybe make this an enum?
 MENU_OPTIONS = {
     1: f"Toggle automatic matchmaking",
     2: "Challenge the AI",
