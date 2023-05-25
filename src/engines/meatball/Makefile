@@ -1,7 +1,9 @@
-appname := exe
+appname := meatball
 
 CXX := clang++
-CPPFLAGS := -g -fdiagnostics-color=always -std=c++17
+CPPFLAGS := -g -fdiagnostics-color=always -std=c++17'
+# LDFLAGS := 
+# LDLIBS := 
 remove := rm -f
 
 sourcefiles := $(shell find . -name "*.cpp")
@@ -14,7 +16,7 @@ $(appname): $(objectfiles)
 
 depend: .depend
 
-.depend: $(sourcefiles)
+.depend: $(sourcefilemakes)
 	$(remove) ./.depend
 	$(CXX) $(CPPFLAGS) -MM $^>>./.depend;
 
