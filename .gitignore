@@ -4,6 +4,7 @@ lichessEnv/
 config.json
 settings.py
 *.log*
+meatball
 
 # stockfish
 *tockfish*/
