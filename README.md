@@ -76,10 +76,10 @@ To run the tests from the root directory:
 pytest test/lichess/
 ```
 
-To run a coverage report:
+To run a coverage report (from the root directory):
 
 ```
-coverage run --source=src/lichess -m pytest -v test/lichess/ && coverage report -m
+coverage run --source=src/lichess -m pytest -v test/ && coverage report -m
 ```
 
 To see a nicer coverage output (run from the same directory you ran the above coverage command):
